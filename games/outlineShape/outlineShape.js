@@ -1,6 +1,29 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
+import Svg, {
+    Circle,
+    Ellipse,
+    G,
+    Text as SvgText,
+    TSpan,
+    TextPath,
+    Path,
+    Polygon,
+    Polyline,
+    Line,
+    Rect,
+    Use,
+    Image,
+    Symbol,
+    Defs,
+    LinearGradient,
+    RadialGradient,
+    Stop,
+    ClipPath,
+    Pattern,
+    Mask,
+} from 'react-native-svg';
 
 export default class OutlineShape extends Component {
     constructor(props) {
@@ -20,15 +43,16 @@ export default class OutlineShape extends Component {
                 <View style={styles.scoreContainer}>
                     <Text style={styles.bigText}>Time passed: {this.state.timeElapsed}</Text>
                 </View>
-                <View style={{ ...styles.contentContainer }}>
-                    <View onTouchStart={(e) => { console.log('touchMove', e.nativeEvent) }}></View>
-                </View>
+                <Svg style={styles.contentContainer} height='100%' width='100%' scale='1' >
+                    <SvgText stroke="#FFFFFF" fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512" onPress={(e) => console.log(e)}>T</SvgText>
+                </Svg>
                 {
-                    this.state.gameFinished && <View style={styles.center}>
+                    this.state.gameFinished &&
+                    <View style={styles.center}>
                         <Animatable.Text style={styles.bigText} animation="pulse" easing="ease-out" iterationCount="infinite">You won in {this.state.timeElapsed} seconds!</Animatable.Text>
                     </View>
                 }
-            </View >
+            </View>
         );
     }
 }
