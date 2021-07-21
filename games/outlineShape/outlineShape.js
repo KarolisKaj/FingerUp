@@ -43,8 +43,8 @@ export default class OutlineShape extends Component {
                 <View style={styles.scoreContainer}>
                     <Text style={styles.bigText}>Time passed: {this.state.timeElapsed}</Text>
                 </View>
-                <Svg style={styles.contentContainer} height='100%' width='100%' scale='1' >
-                    <SvgText stroke="#FFFFFF" fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512" onPress={(e) => console.log(e)}>T</SvgText>
+                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000" onPress={(e) => console.log(e)}>
+                    <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512" >T</SvgText>
                 </Svg>
                 {
                     this.state.gameFinished &&
