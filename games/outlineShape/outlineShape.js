@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import Svg, {
@@ -24,27 +24,58 @@ import Svg, {
     Pattern,
     Mask,
 } from 'react-native-svg';
+import simplifySvgPath from '@luncheon/simplify-svg-path';
 
 export default class OutlineShape extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            currentPath: null,
+            points: []
         }
-
     }
 
+    createSVGPath(points) {
+        if (points.length > 1) {
+            try {
+                return simplifySvgPath(points, {
+                    precision: 5,
+                    tolerance: 1,
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        } else if (points.length === 1) {
+            return `M${points[0][0]},${points[0][1]} L${points[0][0]},${points[0][1]}`;
+        }
+        return '';
+    }
 
     render() {
         return (
-            <View style={styles.container} onMoveShouldSetPanResponder={() => true} onPanResponderMove={(e, gs) => { console.log('touchMove', e.nativeEvent) }}>
+            <View style={styles.container} onMoveShouldSetPanResponder={() => true}>
                 <View style={styles.textContainer}>
                     <Text>Outline Shape</Text>
                 </View>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.bigText}>Time passed: {this.state.timeElapsed}</Text>
                 </View>
-                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000" onPress={(e) => console.log(e)}>
-                    <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512" >T</SvgText>
+                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000"
+                    onMoveShouldSetResponder={() => true}
+                    onStartShouldSetResponder={() => true}
+                    onResponderMove={(e) => {
+                        this.state.points.push([e.nativeEvent.locationX, e.nativeEvent.locationY]);
+                        this.setState({ currentPath: this.createSVGPath(this.state.points, 1, true) });
+                    }}
+                    onResponderRelease={() => { this.setState({ points: [], currentPath: null }) }}>
+                    <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512" >B</SvgText>
+                    <Path
+                        d={this.state.currentPath}
+                        fill="none"
+                        stroke={colorStyles.intenseColor}
+                        strokeWidth={10}
+                        opacity={1}
+                    />
                 </Svg>
                 {
                     this.state.gameFinished &&
