@@ -50,30 +50,38 @@ export default class OutlineShape extends Component {
         }
         return '';
     }
-
+    // TODO: You can see what you drawn from this.state.points. I need to figure out the shape/borders of the char (B) and track what was drawn.
+    // Like if there is no points between two borders in the middle of the letter then we are sure its bad already.
     render() {
         return (
-            <View style={styles.container} onMoveShouldSetPanResponder={() => true}>
+            <View style={styles.container} >
                 <View style={styles.textContainer}>
                     <Text>Outline Shape</Text>
                 </View>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.bigText}>Time passed: {this.state.timeElapsed}</Text>
                 </View>
-                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000"
-                    onMoveShouldSetResponder={() => true}
-                    onStartShouldSetResponder={() => true}
-                    onResponderMove={(e) => {
-                        this.state.points.push([e.nativeEvent.locationX, e.nativeEvent.locationY]);
-                        this.setState({ currentPath: this.createSVGPath(this.state.points, 1, true) });
-                    }}
-                    onResponderRelease={() => { this.setState({ points: [], currentPath: null }) }}>
-                    <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512" >B</SvgText>
+                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000" >
+                    <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512"
+                        ref="Marker"
+                        onMoveShouldSetResponder={() => true}
+                        onStartShouldSetResponder={() => true}
+                        onMoveShouldSetPanResponder={() => true}
+                        onResponderMove={(e) => {
+                            console.log(e.nativeEvent)
+                            this.state.points.push([e.nativeEvent.locationX, e.nativeEvent.locationY]);
+                            this.setState({ currentPath: this.createSVGPath(this.state.points, 1, true) });
+                        }}
+                        onResponderRelease={() => { this.setState({ points: [], currentPath: null }) }}
+                        onLayout={(e) => {
+                            console.log(e.currentTarget)
+                        }}
+                    >B</SvgText>
                     <Path
                         d={this.state.currentPath}
                         fill="none"
                         stroke={colorStyles.intenseColor}
-                        strokeWidth={10}
+                        strokeWidth={5}
                         opacity={1}
                     />
                 </Svg>
