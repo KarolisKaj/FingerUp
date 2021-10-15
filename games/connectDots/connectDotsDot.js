@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Animated, PanResponder } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import Svg, {
     Text as SvgText,
@@ -17,18 +17,30 @@ export default class ConnectDotsDot extends Component {
         };
     }
 
-    getStyle() {
-        let color = this.state.isAlive ? colorStyles.lowerIntenseColor : colorStyles.intenseColor;
-        return {
-            backgroundColor: color,
+    pan = new Animated.ValueXY();
+    panResponder = PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: Animated.event([
+            null,
+            { dx: this.pan.x, dy: this.pan.y }
+        ], { useNativeDriver: false }),
+        onPanResponderRelease: () => {
+            Animated.spring(this.pan, { toValue: { x: 0, y: 0 } }, { useNativeDriver: true }).start();
         }
-    }
 
+    });
     render() {
         return (
-            <Svg height="20" width="20">
-                <Circle cx="10" cy="10" r="10" fill="black" />
-            </Svg>
+            <Animated.View
+                style={{
+                    transform: [{ translateX: this.pan.x }, { translateY: this.pan.y }]
+                }}
+                {...this.panResponder.panHandlers}
+            >
+                <Svg height="40" width="40">
+                    <Circle cx="20" cy="20" r="20" fill="black" />
+                </Svg>
+            </Animated.View>
         );
     }
 }
