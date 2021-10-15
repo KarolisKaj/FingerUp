@@ -1,38 +1,36 @@
-import React, { Component, useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import * as React from 'react';
+import {Component} from 'react';
+import { View, Text, StyleSheet, Platform, ReactNativeComponentTree }  from 'react-native';
 import colorStyles from '../../styles/colorStyles'
+import ReactDOMServer from 'react-dom/server';
 import Svg, {
-    Circle,
-    Ellipse,
-    G,
     Text as SvgText,
-    TSpan,
-    TextPath,
     Path,
-    Polygon,
-    Polyline,
-    Line,
-    Rect,
-    Use,
-    Image,
-    Symbol,
-    Defs,
-    LinearGradient,
-    RadialGradient,
-    Stop,
-    ClipPath,
-    Pattern,
-    Mask,
 } from 'react-native-svg';
 import simplifySvgPath from '@luncheon/simplify-svg-path';
+
 
 export default class OutlineShape extends Component {
     constructor(props) {
         super(props)
         this.state = {
             currentPath: null,
-            points: []
+            points: [],
+            isWeb: Platform.OS === 'web',
         }
+
+    }
+
+    childToWeb(child) {
+        const { type, props } = child;
+        const name = type && type.displayName;
+        const webName = name && name[0].toLowerCase() + name.slice(1);
+        const Tag = webName ? webName : type;
+        return <Tag {...props}>{this.toWeb(props.children)}</Tag>;
+    };
+
+    toWeb(children) {
+        React.Children.map(children, this.childToWeb)
     }
 
     createSVGPath(points) {
@@ -54,28 +52,40 @@ export default class OutlineShape extends Component {
     // Like if there is no points between two borders in the middle of the letter then we are sure its bad already.
     render() {
         return (
-            <View style={styles.container} >
-                <View style={styles.textContainer}>
-                    <Text>Outline Shape</Text>
-                </View>
-                <View style={styles.scoreContainer}>
-                    <Text style={styles.bigText}>Time passed: {this.state.timeElapsed}</Text>
-                </View>
-                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000" >
+            <View style={styles.container}>
+                <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000"
+                    onLayout={(e) => {
+                        console.log(e)
+
+                        // const webJsx = isWeb ? element : toWeb(element);
+                        // console.log(e.target)
+
+                        // const svgString = ReactDOMServer.renderToStaticMarkup(e.target)
+                        // console.log(svgString)
+
+                        }
+                    }
+                >
                     <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512"
-                        ref="Marker"
                         onMoveShouldSetResponder={() => true}
                         onStartShouldSetResponder={() => true}
-                        onMoveShouldSetPanResponder={() => true}
+
                         onResponderMove={(e) => {
-                            console.log(e.nativeEvent)
+                            // console.log(e)
+                            console.log(e.target.tag)
+                            // ReactNativeComponentTree.getInstanceFromNode(e.target.nativeTag);
+                            // let element = this.toWeb(e.target)
                             this.state.points.push([e.nativeEvent.locationX, e.nativeEvent.locationY]);
                             this.setState({ currentPath: this.createSVGPath(this.state.points, 1, true) });
                         }}
-                        onResponderRelease={() => { this.setState({ points: [], currentPath: null }) }}
-                        onLayout={(e) => {
-                            console.log(e.currentTarget)
+                        onResponderRelease={() => {
+                            this.setState({ points: [], currentPath: null })
+                            // TODO: Validate that whole path was within letter and whole letter is completed.
                         }}
+                        onLayout={(e) => {
+                            // console.log(e.target)
+                        }
+                        }
                     >B</SvgText>
                     <Path
                         d={this.state.currentPath}
@@ -85,12 +95,6 @@ export default class OutlineShape extends Component {
                         opacity={1}
                     />
                 </Svg>
-                {
-                    this.state.gameFinished &&
-                    <View style={styles.center}>
-                        <Animatable.Text style={styles.bigText} animation="pulse" easing="ease-out" iterationCount="infinite">You won in {this.state.timeElapsed} seconds!</Animatable.Text>
-                    </View>
-                }
             </View>
         );
     }
@@ -102,28 +106,9 @@ const styles = StyleSheet.create({
         backgroundColor: colorStyles.lowIntenseColor,
         flexDirection: 'column',
     },
-    textContainer: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    scoreContainer: {
-        flex: 19,
-        alignItems: 'center',
-    },
     contentContainer: {
         position: "absolute",
         top: 0, left: 0,
         right: 0, bottom: 0,
-    },
-    center: {
-        position: 'absolute',
-        top: 0, left: 0,
-        right: 0, bottom: 0,
-        backgroundColor: colorStyles.lowIntenseColor,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    bigText: {
-        fontSize: 32
     }
 })

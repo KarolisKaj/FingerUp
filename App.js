@@ -9,6 +9,7 @@ import CardMatch from './games/cardMatch/cardMatch';
 import PinchFish from './games/pinchFish/pinchFish';
 import SeaMatch from './games/seaMatch/seaMatch';
 import OutlineShape from './games/outlineShape/outlineShape';
+import ConnectDots from './games/connectDots/connectDots';
 
 const instructions = Platform.select({
   ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
@@ -44,6 +45,10 @@ export default function App() {
         <Stack.Screen
           name="OutlineShape"
           component={OutlineShape}
+        />
+        <Stack.Screen
+          name="ConnectDots"
+          component={ConnectDots}
         />
       </Stack.Navigator>
     </NavigationContainer>

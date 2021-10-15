@@ -24,6 +24,9 @@ function Home({ navigation }) {
                 <View style={styles.button}>
                     <Button color={colorStyles.mediumIntenseColor} title="Outline Shape" onPress={() => navigation.navigate('OutlineShape')}></Button>
                 </View>
+                <View style={styles.button}>
+                    <Button color={colorStyles.mediumIntenseColor} title="Connect Dots" onPress={() => navigation.navigate('ConnectDots')}></Button>
+                </View>
             </View>
         </View>
     );
