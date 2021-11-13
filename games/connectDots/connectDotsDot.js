@@ -3,7 +3,7 @@ import { View, StyleSheet, Animated, PanResponder } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import Svg, {
     Text as SvgText,
-    Path,
+    Line,
     Circle
 } from 'react-native-svg';
 
@@ -13,34 +13,40 @@ export default class ConnectDotsDot extends Component {
         this.state = {
             marked: false,
             isStart: props.isStart,
-            isEnd: props.isEnd
+            isEnd: props.isEnd,
+            X: undefined,
+            Y: undefined,
+            dimension: 40,
+            radius: 20
         };
+        this.setCoordinates = this.setCoordinates.bind(this);
     }
 
-    pan = new Animated.ValueXY();
-    panResponder = PanResponder.create({
-        onMoveShouldSetPanResponder: () => true,
-        onPanResponderMove: Animated.event([
-            null,
-            { dx: this.pan.x, dy: this.pan.y }
-        ], { useNativeDriver: false }),
-        onPanResponderRelease: () => {
-            Animated.spring(this.pan, { toValue: { x: 0, y: 0 } }, { useNativeDriver: true }).start();
-        }
+    setCoordinates(e) {
+        let target = e.currentTarget;
+        target.measure((fx, fy, width, height, px, py) => {
+            // console.log('Component width is: ' + width)
+            // console.log('Component height is: ' + height)
+            // console.log('X offset to frame: ' + fx)
+            // console.log('Y offset to frame: ' + fy)
+            // console.log('X offset to page: ' + px)
+            // console.log('Y offset to page: ' + py)
+            this.setState({ X: px, Y: py })
+            // console.log(px, py)
+            // console.log(fx, fy)
+        })
+        // console.log('circleComp', e.currentTarget);
 
-    });
+
+    }
+
     render() {
         return (
-            <Animated.View
-                style={{
-                    transform: [{ translateX: this.pan.x }, { translateY: this.pan.y }]
-                }}
-                {...this.panResponder.panHandlers}
-            >
-                <Svg height="40" width="40">
-                    <Circle cx="20" cy="20" r="20" fill="black" />
+            <View  >
+                <Svg height={this.state.dimension} width={this.state.dimension} >
+                    <Circle cx={this.state.radius} cy={this.state.radius} r={this.state.radius} fill="black" onLayout={this.setCoordinates} />
                 </Svg>
-            </Animated.View>
+            </View>
         );
     }
 }
