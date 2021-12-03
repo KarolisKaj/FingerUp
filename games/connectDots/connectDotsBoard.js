@@ -33,7 +33,6 @@ export default class ConnectDotsBoard extends Component {
             offsetY: undefined,
             lines: []
         };
-        this.setCoordinates = this.setCoordinates.bind(this);
         this.onMoveShouldSetResponder = this.onMoveShouldSetResponder.bind(this);
         this.dotInCoordinates = this.dotInCoordinates.bind(this);
         this.setMeasurementRec = this.setMeasurementRec.bind(this);
@@ -111,33 +110,16 @@ export default class ConnectDotsBoard extends Component {
             console.log('Y offset to page: ' + py)
             this.setState({ offsetY: py })
             if(px !== 0){
-                this.setMeasurementRec()
+                this.setMeasurementRec(target)
             }
             // console.log(px, py)
             // console.log(fx, fy)
         }), 10)
     }
 
-    setCoordinates(e) {
-        // let target = e.currentTarget;
-        // let target = this.feedPost;
-        // setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
-        //     // console.log('Component width is: ' + width)
-        //     // console.log('Component height is: ' + height)
-        //     console.log('X offset to frame: ' + fx)
-        //     console.log('Y offset to frame: ' + fy)
-        //     console.log('X offset to page: ' + px)
-        //     console.log('Y offset to page: ' + py)
-        //     this.setState({ offsetY: py })
-        //     // console.log(px, py)
-        //     // console.log(fx, fy)
-        // }), 500)
-
-    }
-
     render() {
         return (
-            <View style={styles.boardContainer} onLayout={this.setCoordinates}  ref={view => { this.feedPost = view; }}>
+            <View style={styles.boardContainer} ref={view => { this.feedPost = view; }}>
                 {this.state.board.map((line, index) => (<View key={index} style={styles.rowContainer}>{line.map(dot => dot.element)}</View>))}
                 <View style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}>
                     <Svg style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}
