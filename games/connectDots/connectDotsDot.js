@@ -23,26 +23,15 @@ export default class ConnectDotsDot extends Component {
     }
 
     setCoordinates(e) {
-        let target = e.currentTarget;
-        target.measure((fx, fy, width, height, px, py) => {
-            // console.log('Component width is: ' + width)
-            // console.log('Component height is: ' + height)
-            // console.log('X offset to frame: ' + fx)
-            // console.log('Y offset to frame: ' + fy)
-            // console.log('X offset to page: ' + px)
-            // console.log('Y offset to page: ' + py)
+        var target = e.currentTarget;
+        setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
             this.setState({ X: px, Y: py })
-            // console.log(px, py)
-            // console.log(fx, fy)
-        })
-        // console.log('circleComp', e.currentTarget);
-
-
+        }), 1000)
     }
 
     render() {
         return (
-            <View  >
+            <View ref={view => { this.feedPost = view; }} >
                 <Svg height={this.state.dimension} width={this.state.dimension} >
                     <Circle cx={this.state.radius} cy={this.state.radius} r={this.state.radius} fill="black" onLayout={this.setCoordinates} />
                 </Svg>
