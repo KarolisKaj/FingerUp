@@ -31,11 +31,12 @@ export default class ConnectDotsBoard extends Component {
             startedPageX: 0,
             startedPageY: 0,
             offsetY: undefined,
+            lineColor: 'transparent',
             lines: []
         };
+        this.setCoordinates = this.setCoordinates.bind(this);
         this.onMoveShouldSetResponder = this.onMoveShouldSetResponder.bind(this);
         this.dotInCoordinates = this.dotInCoordinates.bind(this);
-        this.setMeasurementRec = this.setMeasurementRec.bind(this);
         this.panResponder =
             PanResponder.create({
                 onStartShouldSetPanResponder: (evt, gestureState) => {
@@ -65,10 +66,14 @@ export default class ConnectDotsBoard extends Component {
                         currentLines.push((<Line key={this.state.lines.length} x1={startDot.ref.current.state.X + r} y1={startDot.ref.current.state.Y - this.state.offsetY + r} x2={endDot.ref.current.state.X + r} y2={endDot.ref.current.state.Y - this.state.offsetY + r} stroke="green" strokeWidth="5" />))
                         this.setState({ lines: currentLines })
                     }
-                    this.setState({ draggedX: 0, draggedY: 0, startedX: 0, startedY: 0 })
+                    this.setState({ draggedX: 0, draggedY: 0, startedX: 0, startedY: 0, lineColor: 'transparent' })
                 },
-                onPanResponderGrant: (evt, gestureState) => {
-                    // this.setState({ startedX: evt.nativeEvent.locationX, startedY: evt.nativeEvent.locationY })
+                onPanResponderGrant: (e, gestureState) => {
+                    // let dot = this.dotInCoordinates(e.nativeEvent.pageX, e.nativeEvent.pageY);
+                    // if (dot) {
+                    //     let r = dot.ref.current.state.radius
+                    //     this.setState({ startedX: (dot.ref.current.state.X + r), startedY: (dot.ref.current.state.Y - this.state.offsetY + r), startedPageX: e.nativeEvent.pageX, startedPageY: e.nativeEvent.pageY })
+                    // }
                 },
             });
     }
@@ -87,7 +92,8 @@ export default class ConnectDotsBoard extends Component {
         let dot = this.dotInCoordinates(e.nativeEvent.pageX, e.nativeEvent.pageY);
         if (dot) {
             let r = dot.ref.current.state.radius
-            this.setState({ startedX: (dot.ref.current.state.X + r), startedY: (dot.ref.current.state.Y - this.state.offsetY + r), startedPageX: e.nativeEvent.pageX, startedPageY: e.nativeEvent.pageY })
+            this.setState({ startedX: (dot.ref.current.state.X + r), startedY: (dot.ref.current.state.Y - this.state.offsetY + r), startedPageX: e.nativeEvent.pageX, startedPageY: e.nativeEvent.pageY },
+                () => { setTimeout(() => this.setState({ lineColor: 'black' }), 5) })
             return true
         }
         else {
@@ -95,38 +101,35 @@ export default class ConnectDotsBoard extends Component {
         }
     }
 
-    componentDidMount(){
-        let target = this.feedPost;
-        setTimeout(() => this.setMeasurementRec(target), 100)
-    }
-
-    setMeasurementRec(target){
+    setMeasurementRec(target) {
         setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
-            // console.log('Component width is: ' + width)
-            // console.log('Component height is: ' + height)
             console.log('X offset to frame: ' + fx)
             console.log('Y offset to frame: ' + fy)
             console.log('X offset to page: ' + px)
             console.log('Y offset to page: ' + py)
             this.setState({ offsetY: py })
-            if(px !== 0){
+            if (px !== 0) {
                 this.setMeasurementRec(target)
             }
-            // console.log(px, py)
-            // console.log(fx, fy)
         }), 10)
+    }
+
+    setCoordinates(e) {
+        let target = e.currentTarget;
+        setTimeout(() => this.setMeasurementRec(target), 50)
+
     }
 
     render() {
         return (
-            <View style={styles.boardContainer} ref={view => { this.feedPost = view; }}>
+            <View style={styles.boardContainer} onLayout={this.setCoordinates} ref={view => { this.feedPost = view; }}>
                 {this.state.board.map((line, index) => (<View key={index} style={styles.rowContainer}>{line.map(dot => dot.element)}</View>))}
                 <View style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}>
                     <Svg style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}
                         {...this.panResponder.panHandlers}
                     >
                         <Svg>
-                            <Line key={-1} x1={this.state.startedX} y1={this.state.startedY} x2={this.state.draggedX} y2={this.state.draggedY} stroke="black" strokeWidth="5" />
+                            <Line key={-1} x1={this.state.startedX} y1={this.state.startedY} x2={this.state.draggedX} y2={this.state.draggedY} stroke={this.state.lineColor} strokeWidth="5" />
                         </Svg>
                         <Svg>
                             {this.state.lines}
