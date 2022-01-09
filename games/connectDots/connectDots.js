@@ -11,6 +11,7 @@ export default class ConnectDots extends Component {
         super(props)
         this.state = {
             marked: false,
+            shape: shapes()[Math.floor(Math.random() * shapes().length)]
         }
     }
 
@@ -21,7 +22,7 @@ export default class ConnectDots extends Component {
                     <Text>Connect Dots</Text>
                 </View>
                 <View style={styles.boardContainer}>
-                    <Board dotsCount={4} shapeCoordinates={shapes(4)[Math.floor(Math.random() * shapes.length)]} />
+                    <Board dotsCount={this.state.shape.size} shapeCoordinates={this.state.shape.shape} />
                 </View>
             </View>
         );

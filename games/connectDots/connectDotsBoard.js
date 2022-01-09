@@ -9,8 +9,6 @@ import Svg, {
 function createDots(dotsCount, shapeCoordinates) {
     let firstCoordinates = shapeCoordinates[0][0]
     let secondCoordinates = shapeCoordinates[0][1]
-    // console.log(firstCoordinates)
-    // console.log(secondCoordinates)
     let dots = []
     Array.from({ length: dotsCount }, (_, i) => {
         dots.push([])

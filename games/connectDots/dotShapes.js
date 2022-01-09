@@ -1,9 +1,8 @@
-export default shapes = (dotCount) => {
-    let floor = (x) => Math.floor(x);
-    let ceil = (x) => Math.ceil(x);
+export default shapes = () => {
     return [
-        [[[0, dotCount - 1], [dotCount - 1, 0]], [[0, 0], [dotCount - 1, dotCount - 1]]],
-        [[[0, dotCount - 1], [floor((dotCount - 1) / 2), 0], [dotCount - 1, dotCount - 1]], [[0, ceil(dotCount / 2)], [dotCount - 1, ceil(dotCount / 2)]]],
-        [[[dotCount - 1, 0], [floor((dotCount - 1) / 2), 0], [0, 1], [0, dotCount - 1], [floor((dotCount - 1) / 2), dotCount - 1], [dotCount - 1, dotCount - 1]]]
+        { size: 3, shape: [[[0, 2], [2, 0]], [[0, 0], [2, 2]]] },
+        { size: 4, shape: [[[0, 3], [1, 0], [2, 3]], [[0, 2], [2, 2]]] },
+        { size: 3, shape: [[[1, 0], [1, 2]], [[0, 1], [2, 1]]] },
+        { size: 4, shape: [[[3, 0], [1, 0], [0, 1], [0, 2], [1, 3], [3, 3]]] },
     ]
 }
