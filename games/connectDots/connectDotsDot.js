@@ -20,13 +20,22 @@ export default class ConnectDotsDot extends Component {
             radius: 20
         };
         this.setCoordinates = this.setCoordinates.bind(this);
+        this.measureRec = this.measureRec.bind(this);
     }
 
     setCoordinates(e) {
         var target = e.currentTarget;
+        this.measureRec(target)
+    }
+
+    measureRec(target){
         setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
+            console.log(px,py)
             this.setState({ X: px, Y: py })
-        }), 1000)
+            if(px !== this.state.X || py !== this.state.Y){
+                this.measureRec(target)
+            }
+        }), 250)
     }
 
     render() {

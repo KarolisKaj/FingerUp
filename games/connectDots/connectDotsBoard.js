@@ -46,15 +46,15 @@ export default class ConnectDotsBoard extends Component {
                     // return this.onMoveShouldSetResponder(evt)
                 },
                 onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+                    console.log({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                     return this.onMoveShouldSetResponder(evt)
                 },
                 onMoveShouldSetPanResponder: (evt, gestureState) => {
+                    console.log({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                     return this.onMoveShouldSetResponder(evt)
                 },
                 onPanResponderMove: (evt, gestureState) => {
-                    if (this.state.startedX === 0 && this.state.startedY === 0) {
-                        // this.setState({ startedX: evt.nativeEvent.locationX, startedY: evt.nativeEvent.locationY })
-                    }
+                    console.log({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                     this.setState({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                 },
                 onPanResponderRelease: (evt, gestureState) => {
@@ -103,10 +103,7 @@ export default class ConnectDotsBoard extends Component {
 
     setMeasurementRec(target) {
         setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
-            console.log('X offset to frame: ' + fx)
-            console.log('Y offset to frame: ' + fy)
-            console.log('X offset to page: ' + px)
-            console.log('Y offset to page: ' + py)
+            // console.log(px, py)
             this.setState({ offsetY: py })
             if (px !== 0) {
                 this.setMeasurementRec(target)
@@ -117,7 +114,6 @@ export default class ConnectDotsBoard extends Component {
     setCoordinates(e) {
         let target = e.currentTarget;
         setTimeout(() => this.setMeasurementRec(target), 50)
-
     }
 
     render() {

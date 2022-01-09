@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         backgroundColor: colorStyles.lowIntenseColor,
     },
     textContainer: {
-        flex: 0.1,
+        flex: 1,
         paddingHorizontal: 10,
     },
     gamesContainer: {
@@ -53,6 +53,9 @@ const styles = StyleSheet.create({
         fontSize: 30,
         textAlign: 'center',
     },
+    button: {
+        margin:'5%'
+    }
 });
 
 export default Home
