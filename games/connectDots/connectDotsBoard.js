@@ -6,13 +6,24 @@ import Svg, {
     Line,
 } from 'react-native-svg';
 
-function createDots(dotsCount) {
+function createDots(dotsCount, shapeCoordinates) {
+    let firstCoordinates = shapeCoordinates[0][0]
+    let secondCoordinates = shapeCoordinates[0][1]
+    // console.log(firstCoordinates)
+    // console.log(secondCoordinates)
     let dots = []
     Array.from({ length: dotsCount }, (_, i) => {
         dots.push([])
         Array.from({ length: dotsCount }, (_, j) => {
             let dotRef = React.createRef()
-            dots[i].push(({ element: <Dot key={`${j},${i}`} ref={dotRef}></Dot>, ref: dotRef }))
+            let isStart = firstCoordinates[0] === i && firstCoordinates[1] === j;
+            let isEnd = secondCoordinates[0] === i && secondCoordinates[1] === j;
+            let startEndState = { isStart, isEnd }
+            dots[i].push({
+                element: (<Dot startEndState={startEndState} key={`${j},${i}`} ref={dotRef}></Dot>),
+                ref: dotRef,
+                startEndState
+            })
         });
     });
     return dots
@@ -23,7 +34,8 @@ export default class ConnectDotsBoard extends Component {
         super(props);
         this.state = {
             dotsCount: props.dotsCount,
-            board: createDots(props.dotsCount),
+            shapeCoordinates: props.shapeCoordinates,
+            board: createDots(props.dotsCount, props.shapeCoordinates),
             draggedX: undefined,
             draggedY: undefined,
             startedX: 0,
@@ -32,50 +44,61 @@ export default class ConnectDotsBoard extends Component {
             startedPageY: 0,
             offsetY: undefined,
             lineColor: 'transparent',
-            lines: []
+            lines: [],
         };
         this.setCoordinates = this.setCoordinates.bind(this);
         this.onMoveShouldSetResponder = this.onMoveShouldSetResponder.bind(this);
         this.dotInCoordinates = this.dotInCoordinates.bind(this);
+        this.updateStartEnd = this.updateStartEnd.bind(this);
         this.panResponder =
             PanResponder.create({
-                onStartShouldSetPanResponder: (evt, gestureState) => {
-                    // return this.onMoveShouldSetResponder(evt)
-                },
-                onStartShouldSetPanResponderCapture: (evt, gestureState) => {
-                    // return this.onMoveShouldSetResponder(evt)
-                },
                 onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
-                    console.log({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                     return this.onMoveShouldSetResponder(evt)
                 },
                 onMoveShouldSetPanResponder: (evt, gestureState) => {
-                    console.log({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                     return this.onMoveShouldSetResponder(evt)
                 },
                 onPanResponderMove: (evt, gestureState) => {
-                    console.log({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                     this.setState({ draggedX: evt.nativeEvent.locationX, draggedY: evt.nativeEvent.locationY })
                 },
                 onPanResponderRelease: (evt, gestureState) => {
                     let startDot = this.dotInCoordinates(this.state.startedPageX, this.state.startedPageY)
                     let endDot = this.dotInCoordinates(evt.nativeEvent.pageX, evt.nativeEvent.pageY)
-                    if (endDot && startDot) {
+                    if (endDot && startDot && endDot.startEndState.isEnd && startDot.startEndState.isStart) {
                         let currentLines = this.state.lines
                         let r = endDot.ref.current.state.radius
                         currentLines.push((<Line key={this.state.lines.length} x1={startDot.ref.current.state.X + r} y1={startDot.ref.current.state.Y - this.state.offsetY + r} x2={endDot.ref.current.state.X + r} y2={endDot.ref.current.state.Y - this.state.offsetY + r} stroke="green" strokeWidth="5" />))
                         this.setState({ lines: currentLines })
+                        this.updateStartEnd()
                     }
                     this.setState({ draggedX: 0, draggedY: 0, startedX: 0, startedY: 0, lineColor: 'transparent' })
-                },
-                onPanResponderGrant: (e, gestureState) => {
-                    // let dot = this.dotInCoordinates(e.nativeEvent.pageX, e.nativeEvent.pageY);
-                    // if (dot) {
-                    //     let r = dot.ref.current.state.radius
-                    //     this.setState({ startedX: (dot.ref.current.state.X + r), startedY: (dot.ref.current.state.Y - this.state.offsetY + r), startedPageX: e.nativeEvent.pageX, startedPageY: e.nativeEvent.pageY })
-                    // }
-                },
+                }
             });
+    }
+
+    updateStartEnd() {
+        this.state.board.forEach(row => {
+            row.forEach(element => {
+                element.startEndState.isStart = false;
+                element.startEndState.isEnd = false;
+                element.ref.current.renderState(element.startEndState);
+            })
+        });
+        this.setState({ board: this.state.board })
+
+        let movesMade = this.state.lines.length;
+        this.state.shapeCoordinates.forEach(innerArray => {
+            if (movesMade >= innerArray.length - 1) {
+                movesMade -= innerArray.length - 1
+            } else {
+                let startDot = this.state.board[innerArray[movesMade][0]][innerArray[movesMade][1]];
+                let endDot = this.state.board[innerArray[movesMade + 1][0]][innerArray[movesMade + 1][1]]
+                startDot.startEndState.isStart = true
+                endDot.startEndState.isEnd = true
+                startDot.ref.current.renderState(startDot.startEndState)
+                endDot.ref.current.renderState(endDot.startEndState)
+            }
+        });
     }
 
     dotInCoordinates(x, y) {
@@ -90,7 +113,7 @@ export default class ConnectDotsBoard extends Component {
 
     onMoveShouldSetResponder(e) {
         let dot = this.dotInCoordinates(e.nativeEvent.pageX, e.nativeEvent.pageY);
-        if (dot) {
+        if (dot && dot.startEndState.isStart) {
             let r = dot.ref.current.state.radius
             this.setState({ startedX: (dot.ref.current.state.X + r), startedY: (dot.ref.current.state.Y - this.state.offsetY + r), startedPageX: e.nativeEvent.pageX, startedPageY: e.nativeEvent.pageY },
                 () => { setTimeout(() => this.setState({ lineColor: 'black' }), 5) })
@@ -103,7 +126,6 @@ export default class ConnectDotsBoard extends Component {
 
     setMeasurementRec(target) {
         setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
-            // console.log(px, py)
             this.setState({ offsetY: py })
             if (px !== 0) {
                 this.setMeasurementRec(target)

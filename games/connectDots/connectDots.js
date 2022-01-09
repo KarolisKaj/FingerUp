@@ -4,15 +4,13 @@ import { View, Text, StyleSheet, Platform } from 'react-native';
 import { color } from 'react-native-reanimated';
 import colorStyles from '../../styles/colorStyles'
 import Board from './connectDotsBoard'
-
+import shapes from './dotShapes'
 
 export default class ConnectDots extends Component {
     constructor(props) {
         super(props)
         this.state = {
             marked: false,
-            isStart: props.isStart,
-            isEnd: props.isEnd
         }
     }
 
@@ -23,7 +21,7 @@ export default class ConnectDots extends Component {
                     <Text>Connect Dots</Text>
                 </View>
                 <View style={styles.boardContainer}>
-                    <Board dotsCount={3} />
+                    <Board dotsCount={4} shapeCoordinates={shapes(4)[Math.floor(Math.random() * shapes.length)]} />
                 </View>
             </View>
         );

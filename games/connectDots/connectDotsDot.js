@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Animated, PanResponder } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import Svg, {
     Text as SvgText,
-    Line,
     Circle
 } from 'react-native-svg';
 
@@ -12,15 +11,19 @@ export default class ConnectDotsDot extends Component {
         super(props);
         this.state = {
             marked: false,
-            isStart: props.isStart,
-            isEnd: props.isEnd,
             X: undefined,
             Y: undefined,
             dimension: 40,
-            radius: 20
+            radius: 20,
+            startEndState: props.startEndState
         };
         this.setCoordinates = this.setCoordinates.bind(this);
         this.measureRec = this.measureRec.bind(this);
+        this.renderState = this.renderState.bind(this);
+    }
+
+    renderState(startEndState) {
+        this.setState({ startEndState: startEndState })
     }
 
     setCoordinates(e) {
@@ -28,11 +31,10 @@ export default class ConnectDotsDot extends Component {
         this.measureRec(target)
     }
 
-    measureRec(target){
+    measureRec(target) {
         setTimeout(() => target.measure((fx, fy, width, height, px, py) => {
-            console.log(px,py)
             this.setState({ X: px, Y: py })
-            if(px !== this.state.X || py !== this.state.Y){
+            if (px !== this.state.X || py !== this.state.Y) {
                 this.measureRec(target)
             }
         }), 250)
@@ -42,7 +44,7 @@ export default class ConnectDotsDot extends Component {
         return (
             <View ref={view => { this.feedPost = view; }} >
                 <Svg height={this.state.dimension} width={this.state.dimension} >
-                    <Circle cx={this.state.radius} cy={this.state.radius} r={this.state.radius} fill="black" onLayout={this.setCoordinates} />
+                    <Circle cx={this.state.radius} cy={this.state.radius} r={this.state.radius} fill={this.state.startEndState.isStart ? 'yellow' : this.state.startEndState.isEnd ? 'green' : 'black'} onLayout={this.setCoordinates} />
                 </Svg>
             </View>
         );
