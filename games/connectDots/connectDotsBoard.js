@@ -5,6 +5,8 @@ import Dot from './connectDotsDot.js'
 import Svg, {
     Line,
 } from 'react-native-svg';
+import playSound from '../../services/audioService';
+import soundFiles from '../../services/soundFileLocations'
 
 function createDots(dotsCount, shapeCoordinates) {
     let firstCoordinates = shapeCoordinates[0][0]
@@ -43,6 +45,7 @@ export default class ConnectDotsBoard extends Component {
             offsetY: undefined,
             lineColor: 'transparent',
             lines: [],
+            notifyGameFinished: props.notifyGameFinished
         };
         this.setCoordinates = this.setCoordinates.bind(this);
         this.onMoveShouldSetResponder = this.onMoveShouldSetResponder.bind(this);
@@ -68,6 +71,9 @@ export default class ConnectDotsBoard extends Component {
                         currentLines.push((<Line key={this.state.lines.length} x1={startDot.ref.current.state.X + r} y1={startDot.ref.current.state.Y - this.state.offsetY + r} x2={endDot.ref.current.state.X + r} y2={endDot.ref.current.state.Y - this.state.offsetY + r} stroke="green" strokeWidth="5" />))
                         this.setState({ lines: currentLines })
                         this.updateStartEnd()
+                        playSound(soundFiles.correctAnswerFile);
+                    } else {
+                        playSound(soundFiles.wrongAnswerFile);
                     }
                     this.setState({ draggedX: 0, draggedY: 0, startedX: 0, startedY: 0, lineColor: 'transparent' })
                 }
@@ -97,6 +103,9 @@ export default class ConnectDotsBoard extends Component {
                 endDot.ref.current.renderState(endDot.startEndState)
             }
         });
+        if (this.state.lines.length == this.state.shapeCoordinates.map(x => x.length - 1).reduce((a, b) => a + b, 0)) {
+            this.state.notifyGameFinished()
+        }
     }
 
     dotInCoordinates(x, y) {

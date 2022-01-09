@@ -23,8 +23,6 @@ export default class SeaMatch extends Component {
             shapesMap: undefined,
             timeElapsed: 0,
             gameFinished: false,
-            correctSound: undefined,
-            wrongSound: undefined,
         }
     }
 
