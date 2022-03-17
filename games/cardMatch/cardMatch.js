@@ -11,8 +11,8 @@ export default class CardMatch extends Component {
             hasFinished: false
         };
     }
+    
     gameFinished() {
-
         setTimeout(function () { this.setState({ hasFinished: true }) }.bind(this), 1000);
         setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
         setTimeout(function () { this.props.navigation.navigate('Home') }.bind(this), 10000);

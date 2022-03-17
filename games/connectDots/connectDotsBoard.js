@@ -149,10 +149,8 @@ export default class ConnectDotsBoard extends Component {
         return (
             <View style={styles.boardContainer} onLayout={this.setCoordinates} ref={view => { this.feedPost = view; }}>
                 {this.state.board.map((line, index) => (<View key={index} style={styles.rowContainer}>{line.map(dot => dot.element)}</View>))}
-                <View style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}>
-                    <Svg style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}
-                        {...this.panResponder.panHandlers}
-                    >
+                <View {...this.panResponder.panHandlers} style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}>
+                    <Svg style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0}} >
                         <Svg>
                             <Line key={-1} x1={this.state.startedX} y1={this.state.startedY} x2={this.state.draggedX} y2={this.state.draggedY} stroke={this.state.lineColor} strokeWidth="5" />
                         </Svg>
@@ -171,8 +169,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'stretch',
-        justifyContent: 'space-around'
-
+        justifyContent: 'space-around',
     },
     rowContainer: {
         flex: 1,

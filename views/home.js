@@ -1,36 +1,49 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import colorStyles from '../styles/colorStyles'
 
-function Home({ navigation }) {
-    return (
-        <View style={styles.container}>
-            <View style={styles.textContainer}>
-                <Text style={styles.welcome}>Hello dear traveler, choose a game to play!</Text>
+export default class Home extends Component {
+    constructor(props) {
+        super(props)
+    }
+
+    componentDidMount() {
+    	// do stuff while splash screen is shown
+        // After having done stuff (such as async tasks) hide the splash screen
+        // SplashScreen.hide();
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.welcome}>Hello dear traveler, choose a game to play!</Text>
+                </View>
+                <View style={styles.gamesContainer}>
+                    <View style={styles.button}>
+                        <Button color={colorStyles.mediumIntenseColor} title="Game of Life" onPress={() => this.props.navigation.navigate('GameOfLife')}></Button>
+                    </View>
+                    <View style={styles.button}>
+                        <Button color={colorStyles.mediumIntenseColor} title="Card Match" onPress={() => this.props.navigation.navigate('CardMatch')}></Button>
+                    </View>
+                    <View style={styles.button}>
+                        <Button color={colorStyles.mediumIntenseColor} title="Pinch Fish" onPress={() => this.props.navigation.navigate('PinchFish')}></Button>
+                    </View>
+                    <View style={styles.button}>
+                        <Button color={colorStyles.mediumIntenseColor} title="Sea Match" onPress={() => this.props.navigation.navigate('SeaMatch')}></Button>
+                    </View>
+                    <View style={styles.button}>
+                        <Button color={colorStyles.mediumIntenseColor} title="Outline Shape" onPress={() => this.props.navigation.navigate('OutlineShape')}></Button>
+                    </View>
+                    <View style={styles.button}>
+                        <Button color={colorStyles.mediumIntenseColor} title="Connect Dots" onPress={() => this.props.navigation.navigate('ConnectDots')}></Button>
+                    </View>
+                </View>
             </View>
-            <View style={styles.gamesContainer}>
-                <View style={styles.button}>
-                    <Button color={colorStyles.mediumIntenseColor} title="Game of Life" onPress={() => navigation.navigate('GameOfLife')}></Button>
-                </View>
-                <View style={styles.button}>
-                    <Button color={colorStyles.mediumIntenseColor} title="Card Match" onPress={() => navigation.navigate('CardMatch')}></Button>
-                </View>
-                <View style={styles.button}>
-                    <Button color={colorStyles.mediumIntenseColor} title="Pinch Fish" onPress={() => navigation.navigate('PinchFish')}></Button>
-                </View>
-                <View style={styles.button}>
-                    <Button color={colorStyles.mediumIntenseColor} title="Sea Match" onPress={() => navigation.navigate('SeaMatch')}></Button>
-                </View>
-                <View style={styles.button}>
-                    <Button color={colorStyles.mediumIntenseColor} title="Outline Shape" onPress={() => navigation.navigate('OutlineShape')}></Button>
-                </View>
-                <View style={styles.button}>
-                    <Button color={colorStyles.mediumIntenseColor} title="Connect Dots" onPress={() => navigation.navigate('ConnectDots')}></Button>
-                </View>
-            </View>
-        </View>
-    );
+        );
+    }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -54,8 +67,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     button: {
-        margin:'5%'
+        margin: '5%'
     }
 });
-
-export default Home

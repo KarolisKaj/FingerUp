@@ -22,7 +22,8 @@ export default class ConnectDots extends Component {
     }
 
     finishGame() {
-        this.setState({ gameFinished: true })
+        
+        setTimeout(function () { this.setState({ gameFinished: true }) }.bind(this), 500);
         setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
         setTimeout(function () { this.props.navigation.navigate('Home') }.bind(this), 10000);
     }
