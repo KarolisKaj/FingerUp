@@ -10,6 +10,8 @@ import PinchFish from './games/pinchFish/pinchFish';
 import SeaMatch from './games/seaMatch/seaMatch';
 import OutlineShape from './games/outlineShape/outlineShape';
 import ConnectDots from './games/connectDots/connectDots';
+import Motor from './views/motor';
+import Sensory from './views/sensory';
 
 const instructions = Platform.select({
   ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
@@ -49,6 +51,14 @@ export default function App() {
         <Stack.Screen
           name="ConnectDots"
           component={ConnectDots}
+        />
+        <Stack.Screen
+          name="Motor"
+          component={Motor}
+        />
+        <Stack.Screen
+          name="Sensory"
+          component={Sensory}
         />
       </Stack.Navigator>
     </NavigationContainer>

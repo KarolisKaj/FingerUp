@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { color } from 'react-native-reanimated';
 import colorStyles from '../../styles/colorStyles'
 import Board from './connectDotsBoard'
 import shapes from './dotShapes'

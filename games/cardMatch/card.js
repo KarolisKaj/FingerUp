@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import CardFlip from 'react-native-card-flip';
 import colorStyles from '../../styles/colorStyles'
 
