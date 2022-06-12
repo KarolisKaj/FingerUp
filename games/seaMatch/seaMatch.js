@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import Draggable from 'react-native-draggable';
 import { Square, Rectangle, Circle, Oval, Octagon, Trapezoid, Triangle, Hexagon, Pentagon } from 'react-native-shape';
 import * as Animatable from 'react-native-animatable';
 import playSound from '../../services/audioService';
 import soundFiles from '../../services/soundFileLocations'
+import Images from '../../services/imagesLoader'
 
 export default class SeaMatch extends Component {
     constructor(props) {
@@ -14,11 +15,11 @@ export default class SeaMatch extends Component {
             timeLeft: 30,
             timer: undefined,
             shapeCount: 6,
-            sizeOfShape: 50,
+            sizeOfShape: 60,
             margin: 30,
             oneSpaceHeight: Dimensions.get('window').height / 7,
-            colors: ['yellow', 'purple', 'black', 'red', 'blue', 'orange', 'magenta'],
-            shapes: [(color) => <Square color={color} />, (color) => <Rectangle color={color} />, (color) => <Circle color={color} />, (color) => <Hexagon color={color} />, (color) => <Octagon color={color} />, (color) => <Oval color={color} />],
+            colors: ['green', 'purple', 'black', 'red', 'blue', 'orange', 'magenta'],
+            shapes: undefined,
             allShapes: undefined,
             shapesMap: undefined,
             timeElapsed: 0,
@@ -52,6 +53,16 @@ export default class SeaMatch extends Component {
     }
 
     createShapesMap() {
+        createShape = (color, shapeSize, image) => {
+            return <Image style={[styles.shape, { tintColor: color, maxWidth: shapeSize, maxHeight: shapeSize }]} source={image} />
+        }
+        this.state.shapes = [
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.crab,),
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.dolphin),
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.jellyfish),
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.octopus),
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.turtle),
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.whale)]
         let slots = this.getRandomArray();
         let shapes = this.getRandomArray();
         this.state.shapesMap = Array(this.state.shapeCount).fill().map((_, i) => {
@@ -63,7 +74,7 @@ export default class SeaMatch extends Component {
                 slotStartY: slotStartHeight,
                 slotStartX: margin,
                 shapeStartY: shapeStartHeight,
-                shapeStartX: shapeXPosition - this.state.margin * 2,
+                shapeStartX: shapeXPosition - this.state.margin,
                 color: this.state.colors[shapes[i]],
                 isMatched: false
             }
@@ -95,12 +106,12 @@ export default class SeaMatch extends Component {
                             }
                         }
                     }).bind(this)} >
-                    <View style={{ width: this.state.sizeOfShape, width: this.state.sizeOfShape }}>
+                    <View style={{ width: this.state.sizeOfShape, height: this.state.sizeOfShape }}>
                         {this.state.shapes[i](shapeMap.color)}
                     </View>
                 </Draggable>),
                 slot: (<View style={getTopStyle()} key={`${shapeMap.slotStartY}${shapeMap.slotStartX}`}>
-                    { this.state.shapes[i](shapeMap.isMatched ? shapeMap.color : 'grey')}
+                    {this.state.shapes[i](shapeMap.isMatched ? shapeMap.color : 'grey')}
                 </ View>)
             }
         });
@@ -164,5 +175,10 @@ const styles = StyleSheet.create({
     },
     bigText: {
         fontSize: 32
+    },
+    shape: {
+        aspectRatio: 1,
+        padding: 0,
+        margin: 0
     }
 })
