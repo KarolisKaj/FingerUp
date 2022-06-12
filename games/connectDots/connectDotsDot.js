@@ -44,7 +44,7 @@ export default class ConnectDotsDot extends Component {
         return (
             <View ref={view => { this.feedPost = view; }} >
                 <Svg height={this.state.dimension} width={this.state.dimension} >
-                    <Circle cx={this.state.radius} cy={this.state.radius} r={this.state.radius} fill={this.state.startEndState.isStart ? 'yellow' : this.state.startEndState.isEnd ? 'green' : 'black'} onLayout={this.setCoordinates} />
+                    <Circle cx={this.state.radius} cy={this.state.radius} r={this.state.radius} fill={this.state.startEndState.isStart ? 'green' : this.state.startEndState.isEnd ? 'red' : 'black'} onLayout={this.setCoordinates} />
                 </Svg>
             </View>
         );

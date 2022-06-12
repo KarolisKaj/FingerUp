@@ -44,9 +44,6 @@ export default class GameOfLife extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text>Game of life</Text>
-                </View>
                 <View style={styles.boardContainer}>
                     {
                         this.state.boardState.map((column, index) => (<View key={index} style={styles.textContainer}>{column.map(cell => cell.element)}</View>))
