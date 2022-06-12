@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 40,
         margin: 10,
-        color: 'white'
+        color: colorStyles.lowIntenseColor
     },
     button: {
         flex: 1,
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         minHeight: 100,
-        maxHeight:300,
+        maxHeight: 300,
         aspectRatio: 1,
         margin: '1%'
     },

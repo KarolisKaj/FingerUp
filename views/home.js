@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 40,
         margin: 10,
-        color: 'white'
+        color: colorStyles.lowIntenseColor
     },
     button: {
         flexGrow: 1,
