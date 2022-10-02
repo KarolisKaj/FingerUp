@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, StyleSheet, Text, Button, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, Button, TouchableOpacity, Image, Slider } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import OutlineShape from './outlineShape';
 
@@ -10,7 +10,7 @@ export default class OutlineShapeGame extends Component {
         this.state = {
             currentPage: 0,
             currentShape: "B",
-            pages: [{ shape: "B", points: [] }, { shape: "A", points: [] }, { shape: "C", points: [] },]
+            pages: [{ shape: "B", points: [], score: undefined }, { shape: "A", points: [], score: undefined }, { shape: "C", points: [], score: undefined },]
 
         }
     }
@@ -25,6 +25,7 @@ export default class OutlineShapeGame extends Component {
                     style={styles.contentContainer}>
                 </OutlineShape>
                 <View style={styles.contentContainer}>
+                    <View style={styles.spaceTop}></View>
                     {/* <View styles={styles.buttonView}>
                         <Button style={styles.button} title="Prev"
                             disabled={this.state.currentPage == 0}
@@ -35,15 +36,18 @@ export default class OutlineShapeGame extends Component {
                             disabled={this.state.currentPage == this.state.pages.length - 1}
                             onPress={() => this.setState({ currentPage: this.state.currentPage + 1, currentShape: this.state.pages[this.state.currentPage + 1].shape })}></Button>
                     </View> */}
-                    <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 }}}
-                        disabled={this.state.currentPage == 0}
-                        onPress={() => this.setState({ currentPage: this.state.currentPage - 1, currentShape: this.state.pages[this.state.currentPage - 1].shape })}>
-                        <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == this.state.pages.length - 1 ? 0.1 : 0.85 }}} disabled={this.state.currentPage == this.state.pages.length - 1}
-                        onPress={() => this.setState({ currentPage: this.state.currentPage + 1, currentShape: this.state.pages[this.state.currentPage + 1].shape })}>
-                        <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
-                    </TouchableOpacity>
+                    <View style={styles.spaceBottom}>
+                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 } }}
+                            disabled={this.state.currentPage == 0}
+                            onPress={() => this.setState({ currentPage: this.state.currentPage - 1, currentShape: this.state.pages[this.state.currentPage - 1].shape })}>
+                            <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
+                        </TouchableOpacity>
+                        <Slider style={styles.slider} value={this.state.pages[this.state.currentPage].score}></Slider>
+                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == this.state.pages.length - 1 ? 0.1 : 0.85 } }} disabled={this.state.currentPage == this.state.pages.length - 1}
+                            onPress={() => this.setState({ currentPage: this.state.currentPage + 1, currentShape: this.state.pages[this.state.currentPage + 1].shape })}>
+                            <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         );
@@ -56,6 +60,15 @@ const styles = StyleSheet.create({
         backgroundColor: colorStyles.lowIntenseColor,
         flexDirection: 'column',
     },
+    spaceTop: {
+        flex: 7
+    },
+    spaceBottom: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        flexDirection: 'row',
+    },
     contentContainer: {
         position: "absolute",
         top: 0, left: 0,
@@ -63,9 +76,6 @@ const styles = StyleSheet.create({
         minWidth: '100%',
         minHeight: '100%',
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        flexDirection: 'row',
         // alignItems:'stretch'
     },
     button: {
@@ -94,4 +104,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
 
     },
+    slider: {
+        flex: 1,
+        color: colorStyles.mediumIntenseColor,
+    }
 })
