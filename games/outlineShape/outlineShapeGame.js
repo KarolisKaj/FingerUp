@@ -9,7 +9,6 @@ export default class OutlineShapeGame extends Component {
         super(props)
         this.state = {
             currentPage: 0,
-            currentShape: "B",
             pages: [{ shape: "B", points: [], score: undefined }, { shape: "A", points: [], score: undefined }, { shape: "C", points: [], score: undefined },]
 
         }
@@ -21,7 +20,7 @@ export default class OutlineShapeGame extends Component {
                 {// TODO: pass in points to child and get it back then change to viewing mode.
                 }
                 <OutlineShape points={this.state.pages[this.state.currentPage].points}
-                    shape={this.state.currentShape}
+                    shape={this.state.pages[this.state.currentPage].shape}
                     style={styles.contentContainer}>
                 </OutlineShape>
                 <View style={styles.contentContainer}>
@@ -39,12 +38,13 @@ export default class OutlineShapeGame extends Component {
                     <View style={styles.spaceBottom}>
                         <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 } }}
                             disabled={this.state.currentPage == 0}
-                            onPress={() => this.setState({ currentPage: this.state.currentPage - 1, currentShape: this.state.pages[this.state.currentPage - 1].shape })}>
+                            onPress={() => this.setState({ currentPage: this.state.currentPage - 1 })}>
                             <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
                         </TouchableOpacity>
                         <Slider style={styles.slider} value={this.state.pages[this.state.currentPage].score}></Slider>
-                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == this.state.pages.length - 1 ? 0.1 : 0.85 } }} disabled={this.state.currentPage == this.state.pages.length - 1}
-                            onPress={() => this.setState({ currentPage: this.state.currentPage + 1, currentShape: this.state.pages[this.state.currentPage + 1].shape })}>
+                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == this.state.pages.length - 1 ? 0.1 : 0.85 } }}
+                            disabled={this.state.currentPage == this.state.pages.length - 1}
+                            onPress={() => this.setState({ currentPage: this.state.currentPage + 1 })}>
                             <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
                         </TouchableOpacity>
                     </View>
