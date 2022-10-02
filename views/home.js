@@ -33,7 +33,7 @@ export default class Home extends Component {
                                 <Text style={styles.innerBtnText}>Finger Up</Text>
                             </View>
                         </TouchableOpacity >
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('OutlineShape')}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('OutlineShapeGame')}>
                             <View style={styles.innerBtnView}  >
                                 <Image style={styles.innerBtnImage} source={require('../assets/edit-outline.png')} />
                                 <Text style={styles.innerBtnText}>Lets write</Text>

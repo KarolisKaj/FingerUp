@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Component} from 'react';
-import { View, Text, StyleSheet, Platform, ReactNativeComponentTree }  from 'react-native';
+import { Component } from 'react';
+import { View, Text, StyleSheet, Platform, ReactNativeComponentTree } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import ReactDOMServer from 'react-dom/server';
 import Svg, {
@@ -15,22 +15,11 @@ export default class OutlineShape extends Component {
         super(props)
         this.state = {
             currentPath: null,
-            points: [],
-            isWeb: Platform.OS === 'web',
+            shape: props.shape,
+            points: props.points,
+            isReadonly: props.points.length == 0
         }
 
-    }
-
-    childToWeb(child) {
-        const { type, props } = child;
-        const name = type && type.displayName;
-        const webName = name && name[0].toLowerCase() + name.slice(1);
-        const Tag = webName ? webName : type;
-        return <Tag {...props}>{this.toWeb(props.children)}</Tag>;
-    };
-
-    toWeb(children) {
-        React.Children.map(children, this.childToWeb)
     }
 
     createSVGPath(points) {
@@ -55,15 +44,7 @@ export default class OutlineShape extends Component {
             <View style={styles.container}>
                 <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000"
                     onLayout={(e) => {
-                        console.log(e)
-
-                        // const webJsx = isWeb ? element : toWeb(element);
-                        // console.log(e.target)
-
-                        // const svgString = ReactDOMServer.renderToStaticMarkup(e.target)
-                        // console.log(svgString)
-
-                        }
+                    }
                     }
                 >
                     <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512"
@@ -71,14 +52,11 @@ export default class OutlineShape extends Component {
                         onStartShouldSetResponder={() => true}
 
                         onResponderMove={(e) => {
-                            // console.log(e)
-                            console.log(e.target.tag)
-                            // ReactNativeComponentTree.getInstanceFromNode(e.target.nativeTag);
-                            // let element = this.toWeb(e.target)
                             this.state.points.push([e.nativeEvent.locationX, e.nativeEvent.locationY]);
                             this.setState({ currentPath: this.createSVGPath(this.state.points, 1, true) });
                         }}
                         onResponderRelease={() => {
+                            // TODO: set viewing state here?
                             this.setState({ points: [], currentPath: null })
                             // TODO: Validate that whole path was within letter and whole letter is completed.
                         }}
@@ -86,7 +64,7 @@ export default class OutlineShape extends Component {
                             // console.log(e.target)
                         }
                         }
-                    >B</SvgText>
+                    >{this.state.shape}</SvgText>
                     <Path
                         d={this.state.currentPath}
                         fill="none"

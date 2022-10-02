@@ -8,7 +8,7 @@ import GameOfLife from './games/gameOfLife/gameOfLife.js'
 import CardMatch from './games/cardMatch/cardMatch';
 import PinchFish from './games/pinchFish/pinchFish';
 import SeaMatch from './games/seaMatch/seaMatch';
-import OutlineShape from './games/outlineShape/outlineShape';
+import OutlineShapeGame from './games/outlineShape/outlineShapeGame';
 import ConnectDots from './games/connectDots/connectDots';
 import Exercise from './games/exercise/exercise';
 import FingerUp from './views/fingerup';
@@ -46,8 +46,8 @@ export default function App() {
           component={SeaMatch}
         />
         <Stack.Screen
-          name="OutlineShape"
-          component={OutlineShape}
+          name="OutlineShapeGame"
+          component={OutlineShapeGame}
         />
         <Stack.Screen
           name="ConnectDots"
