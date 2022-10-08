@@ -9,7 +9,7 @@ export default class Movement extends Component {
 
     render() {
         return (
-            <ImageBackground source={require('../assets/1804.png')} style={styles.bckgrndImage}>
+            <ImageBackground source={require('../assets/beach_image.png')} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
                         <Text style={styles.welcome}>Choose a game to play!</Text>

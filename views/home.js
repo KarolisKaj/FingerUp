@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import colorStyles from '../styles/colorStyles'
+import storage from '../services/storage'
 
 export default class Home extends Component {
     constructor(props) {
@@ -15,35 +16,25 @@ export default class Home extends Component {
 
     render() {
         return (
-            <ImageBackground source={require('../assets/1804.png')} style={styles.bckgrndImage}>
+            <ImageBackground source={require('../assets/beach_image.png')} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.welcome}>Hello dear traveler, choose an area to play in!</Text>
+                        <Text style={styles.welcome}>Hello! Pick saved player or create one!</Text>
                     </View>
                     <View style={styles.gamesContainer}>
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Movement')}>
+                        <TouchableOpacity style={styles.button} onPress={() => {
+                            // TOOD: need to improve and allow localstorage persistance
+                            // id = storage.createPlayer("John")
+                            // storage.setActivePlayer(id)
+                        }}>
                             <View style={styles.innerBtnView}  >
-                                <Image style={styles.innerBtnImage} source={require('../assets/accessibility-outline.png')} />
-                                <Text style={styles.innerBtnText}>Movement</Text>
-                            </View>
-                        </TouchableOpacity >
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('FingerUp')}>
-                            <View style={styles.innerBtnView}  >
-                                <Image style={styles.innerBtnImage} source={require('../assets/hand.png')} />
-                                <Text style={styles.innerBtnText}>Finger Up</Text>
-                            </View>
-                        </TouchableOpacity >
-                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('OutlineShapeGame')}>
-                            <View style={styles.innerBtnView}  >
-                                <Image style={styles.innerBtnImage} source={require('../assets/edit-outline.png')} />
-                                <Text style={styles.innerBtnText}>Lets write</Text>
+                                <Image style={styles.innerBtnImage} source={require('../assets/edit.png')} />
+                                <Text style={styles.innerBtnText}>Create Player</Text>
                             </View>
                         </TouchableOpacity >
                     </View>
                 </View >
             </ImageBackground>
-
-
         );
     }
 }
@@ -84,7 +75,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         minHeight: 100,
-        maxHeight:300,
+        maxHeight: 200,
         aspectRatio: 1,
         margin: '1%',
     },

@@ -11,6 +11,7 @@ import SeaMatch from './games/seaMatch/seaMatch';
 import OutlineShapeGame from './games/outlineShape/outlineShapeGame';
 import ConnectDots from './games/connectDots/connectDots';
 import Exercise from './games/exercise/exercise';
+import GameStart from './views/gameStart';
 import FingerUp from './views/fingerup';
 import Movement from './views/movement';
 
@@ -28,6 +29,10 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={Home}
+        />
+        <Stack.Screen
+          name="GameStart"
+          component={GameStart}
         />
         <Stack.Screen
           name="GameOfLife"

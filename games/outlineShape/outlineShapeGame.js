@@ -9,32 +9,30 @@ export default class OutlineShapeGame extends Component {
         super(props)
         this.state = {
             currentPage: 0,
-            pages: [{ shape: "B", points: [], score: 50 }, { shape: "A", points: [], score: 50 }, { shape: "C", points: [], score: 50 },]
+            pages: [{ shape: "B", points: [], score: 50 }, { shape: "A", points: [], score: 50 }, { shape: "C", points: [], score: 50 },],
+            isDrawing: true
         }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                {// TODO: pass in points to child and get it back then change to viewing mode.
-                }
-                <OutlineShape points={this.state.pages[this.state.currentPage].points}
+                {this.state.currentPage > -1 && <OutlineShape points={this.state.pages[this.state.currentPage].points}
                     shape={this.state.pages[this.state.currentPage].shape}
                     style={styles.contentContainer}>
-                </OutlineShape>
+                </OutlineShape>}
                 <View style={styles.contentContainer}>
                     <View style={styles.spaceTop}></View>
-                    {/* <View styles={styles.buttonView}>
-                        <Button style={styles.button} title="Prev"
+                    {this.state.isDrawing && <View style={styles.spaceBottom}>
+                        <TouchableOpacity style={{ ...styles.button, ...{ transform: [{ rotate: '90deg' }] } }}
                             disabled={this.state.currentPage == 0}
-                            onPress={() => this.setState({ currentPage: this.state.currentPage - 1, currentShape: this.state.pages[this.state.currentPage - 1].shape })}></Button>
-                    </View>
-                    <View styles={styles.buttonView}>
-                        <Button style={styles.button} title="Next"
-                            disabled={this.state.currentPage == this.state.pages.length - 1}
-                            onPress={() => this.setState({ currentPage: this.state.currentPage + 1, currentShape: this.state.pages[this.state.currentPage + 1].shape })}></Button>
-                    </View> */}
-                    <View style={styles.spaceBottom}>
+                            onPress={() => {
+                                this.setState({ currentPage: this.state.currentPage + 1 })
+                                this.forceUpdate()
+                            }}>
+                            <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
+                        </TouchableOpacity></View>}
+                    {!this.state.isDrawing && <View style={styles.spaceBottom}>
                         <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 }, ...{ transform: [{ rotate: '180deg' }] } }}
                             disabled={this.state.currentPage == 0}
                             onPress={() => {
@@ -62,7 +60,7 @@ export default class OutlineShapeGame extends Component {
                             }}>
                             <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
                         </TouchableOpacity>
-                    </View>
+                    </View>}
                 </View>
             </View>
         );

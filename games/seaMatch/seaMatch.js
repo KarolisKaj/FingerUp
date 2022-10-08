@@ -57,7 +57,7 @@ export default class SeaMatch extends Component {
             return <Image style={[styles.shape, { tintColor: color, maxWidth: shapeSize, maxHeight: shapeSize }]} source={image} />
         }
         this.state.shapes = [
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.crab,),
+            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.crab),
             (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.dolphin),
             (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.jellyfish),
             (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.octopus),

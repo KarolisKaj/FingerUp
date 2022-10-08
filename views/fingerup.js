@@ -9,7 +9,7 @@ export default class FingerUp extends Component {
 
     render() {
         return (
-            <ImageBackground source={require('../assets/1804.png')} style={styles.bckgrndImage}>
+            <ImageBackground source={require('../assets/beach_image.png')} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
                         <Text style={styles.welcome}>Choose a game to play!</Text>
@@ -23,7 +23,7 @@ export default class FingerUp extends Component {
                         </TouchableOpacity >
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('ConnectDots')}>
                             <View style={styles.innerBtnView}  >
-                                <Image style={styles.innerBtnImage} source={require('../assets/marketing.png')} />
+                                <Image style={styles.innerBtnImage} source={require('../assets/connections.png')} />
                                 <Text style={styles.innerBtnText}>Connect</Text>
                             </View>
                         </TouchableOpacity >

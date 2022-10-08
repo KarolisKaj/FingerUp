@@ -6,6 +6,7 @@ import { PinchGestureHandler, State } from 'react-native-gesture-handler'
 import * as Animatable from 'react-native-animatable';
 import playSound from '../../services/audioService';
 import soundFiles from '../../services/soundFileLocations'
+import storage from '../../services/storage'
 
 
 export default class PinchFish extends Component {
