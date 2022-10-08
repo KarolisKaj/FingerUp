@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import colorStyles from '../styles/colorStyles'
 import storage from '../services/storage'
+import images from '../services/imagesLoader'
 
 export default class Home extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ export default class Home extends Component {
 
     render() {
         return (
-            <ImageBackground source={require('../assets/beach_image.png')} style={styles.bckgrndImage}>
+            <ImageBackground source={images.beach_image} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
                         <Text style={styles.welcome}>Hello! Pick saved player or create one!</Text>
@@ -26,9 +27,10 @@ export default class Home extends Component {
                             // TOOD: need to improve and allow localstorage persistance
                             // id = storage.createPlayer("John")
                             // storage.setActivePlayer(id)
+                            this.props.navigation.navigate('GameStart')
                         }}>
                             <View style={styles.innerBtnView}  >
-                                <Image style={styles.innerBtnImage} source={require('../assets/edit.png')} />
+                                <Image style={styles.innerBtnImage} source={images.edit} />
                                 <Text style={styles.innerBtnText}>Create Player</Text>
                             </View>
                         </TouchableOpacity >
