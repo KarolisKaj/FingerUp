@@ -9,8 +9,7 @@ export default class OutlineShapeGame extends Component {
         super(props)
         this.state = {
             currentPage: 0,
-            pages: [{ shape: "B", points: [], score: undefined }, { shape: "A", points: [], score: undefined }, { shape: "C", points: [], score: undefined },]
-
+            pages: [{ shape: "B", points: [], score: 50 }, { shape: "A", points: [], score: 50 }, { shape: "C", points: [], score: 50 },]
         }
     }
 
@@ -36,16 +35,32 @@ export default class OutlineShapeGame extends Component {
                             onPress={() => this.setState({ currentPage: this.state.currentPage + 1, currentShape: this.state.pages[this.state.currentPage + 1].shape })}></Button>
                     </View> */}
                     <View style={styles.spaceBottom}>
-                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 } }}
+                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 }, ...{ transform: [{ rotate: '180deg' }] } }}
                             disabled={this.state.currentPage == 0}
-                            onPress={() => this.setState({ currentPage: this.state.currentPage - 1 })}>
-                            <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
+                            onPress={() => {
+                                this.setState({ currentPage: this.state.currentPage - 1 })
+                                this.forceUpdate()
+                            }}>
+                            <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
                         </TouchableOpacity>
-                        <Slider style={styles.slider} value={this.state.pages[this.state.currentPage].score}></Slider>
+                        <View style={styles.container}>
+                            <Text style={{ textAlign: 'center', fontSize: 20 }}>
+                                Mark - {Math.round(this.state.pages[this.state.currentPage].score)}/100
+                            </Text>
+                            <Slider maximumValue={100} style={styles.slider}
+                                value={this.state.pages[this.state.currentPage].score}
+                                onValueChange={value => {
+                                    this.state.pages[this.state.currentPage].score = value
+                                    this.setState({ pages: this.state.pages })
+                                }}></Slider>
+                        </View>
                         <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == this.state.pages.length - 1 ? 0.1 : 0.85 } }}
                             disabled={this.state.currentPage == this.state.pages.length - 1}
-                            onPress={() => this.setState({ currentPage: this.state.currentPage + 1 })}>
-                            <Image style={styles.innerBtnImage} source={require('../../assets/edit-outline.png')} />
+                            onPress={() => {
+                                this.setState({ currentPage: this.state.currentPage + 1 })
+                                this.forceUpdate()
+                            }}>
+                            <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -99,13 +114,13 @@ const styles = StyleSheet.create({
     innerBtnImage: {
         flex: 1.5,
         aspectRatio: 1,
-        maxHeight: '90%',
         aspectRatio: 1,
         alignSelf: 'center',
 
     },
     slider: {
-        flex: 1,
         color: colorStyles.mediumIntenseColor,
+        padding: 0,
+        margin: 10
     }
 })
