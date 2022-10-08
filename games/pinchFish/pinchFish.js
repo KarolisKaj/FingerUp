@@ -41,7 +41,7 @@ export default class PinchFish extends Component {
             if (this.state.timeLeft < 1) {
                 this.cleanUp();
                 setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
-                setTimeout(function () { this.props.navigation.navigate('Home') }.bind(this), 10000);
+                setTimeout(function () { this.props.navigation.navigate('GameStart') }.bind(this), 10000);
             }
             else {
                 this.setState({ timeLeft: this.state.timeLeft - 1 })

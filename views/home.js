@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
     list: {
         flex: 1,
         borderColor: colorStyles.mediumIntenseColor,
-        borderWidth: 1,
         width: '100%'
     },
     listBtn: {
@@ -155,7 +154,6 @@ const styles = StyleSheet.create({
         backgroundColor: colorStyles.mediumIntenseColor,
         margin: 10,
         fontSize: 26
-
     },
     listTxt: {
         flex: 1,
