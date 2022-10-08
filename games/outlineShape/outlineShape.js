@@ -13,7 +13,6 @@ import simplifySvgPath from '@luncheon/simplify-svg-path';
 export default class OutlineShape extends Component {
     constructor(props) {
         super(props)
-        console.log(props)
         this.state = {
             currentPath: null,
             shape: props.shape,

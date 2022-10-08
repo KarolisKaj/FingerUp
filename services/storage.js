@@ -6,72 +6,83 @@
 //         gameResults,
 //     ]
 // }
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default storage = {
-    createPlayer: (name) => {
-        return createPlayer(name)
+    createPlayer: async (name) => {
+        return await createPlayer(name)
     },
-    getPlayer: () => {
-        return getPlayer()
+    getPlayer: async () => {
+        return await getPlayer()
     },
-    getPlayers: () => {
-        return getPlayers()
+    getPlayers: async () => {
+        return await getPlayers()
     },
     setActivePlayer: (id) => {
         return setActivePlayer(id)
     },
-    updatePlayer: (gameId, gameResult) => {
-        return updatePlayer(gameId, gameResult)
+    updatePlayer: async (gameId, gameResult) => {
+        return await updatePlayer(gameId, gameResult)
     },
-    getGame: (gameName) => {
-        return getGame(gameName)
+    getGame: async (gameName) => {
+        return await getGame(gameName)
     }
 }
 
 activePlayerId = null
 
-function createPlayer(name) {
-    // let player = {
-    //     id,
-    //     name: name,
-    //     games: [
-    //         name,
-    //         gameResults
-    //     ]
-    // }
-    storageLength = localStorage.length
-    for (let i = 0; true; i++) {
-        console.log(i)
-        storedPlayer = localStorage.getItem(i)
-        if (storedPlayer === null) {
-            player.id = i
-            localStorage.setItem(i, JSON.stringify(player))
-            console.log(i)
-            return i
+async function createPlayer(name) {
+    let player = {
+        id,
+        name: name,
+        games: []
+    }
+    try {
+        let allKeys = new Set(await AsyncStorage.getAllKeys())
+        console.log(allKeys)
+        for (let i = 0; true; i++) {
+            if (allKeys.size === i || !allKeys.has(String(i))) {
+                let key = String(i)
+                player.id = key
+                await AsyncStorage.setItem(key, JSON.stringify(player))
+                return key
+            }
         }
+    } catch (e) {
+        console.log(e)
     }
 }
 
-function getPlayer() {
-    storedPlayerString = localStorage.getItem(activePlayerId)
-    if (storedPlayerString !== null) {
-        return JSON.parse(storedPlayerString)
+async function getPlayer() {
+    try {
+        storedPlayerString = await AsyncStorage.getItem(activePlayerId)
+        if (storedPlayerString !== null) {
+            return JSON.parse(storedPlayerString)
+        }
+        return null
     }
-    return null
+    catch (e) {
+        console.log(e)
+    }
 }
 
-function getPlayers() {
-    storageLength = localStorage.length
-    players = []
-    for (let i = 0; true; i++) {
-        storedPlayer = localStorage.getItem(i)
-        if (storedPlayer !== null) {
-            players.append(JSON.parse(storedPlayer))
+async function getPlayers() {
+    try {
+        let storageLength = (await AsyncStorage.getAllKeys()).length
+        let players = []
+        for (let i = 0; true; i++) {
+            let storedPlayer = await AsyncStorage.getItem(String(i))
+            console.log(storedPlayer)
+            if (storedPlayer !== null) {
+                players.push(JSON.parse(storedPlayer))
+            }
+            if (players.length === storageLength) {
+                return players
+            }
         }
-        if (players.length === storageLength) {
-            return players
-        }
+    }
+    catch (e) {
+        console.log(e)
     }
 }
 
@@ -79,38 +90,48 @@ function setActivePlayer(id) {
     activePlayerId = id
 }
 
-function updatePlayer(gameName, gameResult) {
-    player = this.getPlayer(activePlayerId)
-    if (player.games === null) {
-        player.games = [{
-            name: gameName,
-            gamesReults: [gameResult]
-        }]
-    } else {
-        player.games.forEach((game, index) => {
-            if (game.name === gameName) {
-                game.gameResult.append(gameResult)
-                return
-            }
-            if (index === player.games.length - 1) {
-                player.games.append({
-                    name: gameName,
-                    gameResults: [gameResult]
-                })
-                return
-            }
-        });
+async function updatePlayer(gameName, gameResult) {
+    try {
+        player = await this.getPlayer(activePlayerId)
+        if (player.games === null) {
+            player.games = [{
+                name: gameName,
+                gamesReults: [gameResult]
+            }]
+        } else {
+            player.games.forEach((game, index) => {
+                if (game.name === gameName) {
+                    game.gameResult.append(gameResult)
+                    return
+                }
+                if (index === player.games.length - 1) {
+                    player.games.append({
+                        name: gameName,
+                        gameResults: [gameResult]
+                    })
+                    return
+                }
+            });
+        }
+        await storage.setItem(activePlayerId, JSON.stringify(player))
     }
-    storage.setItem(activePlayerId, JSON.stringify(player))
+    catch (e) {
+        console.log(e)
+    }
 }
 
-function getGame(gameName) {
-    player = this.getPlayer(activePlayerId)
-    if (player === null || player.games === null) {
+async function getGame(gameName) {
+    try {
+        player = await this.getPlayer(activePlayerId)
+        if (player === null || player.games === null) {
+            return null
+        }
+        for (let i = 0; i < player.games.length; i++) {
+            if (player.games[i].name === gameName) return player.games[i]
+        }
         return null
     }
-    for (let i = 0; i < player.games.length; i++) {
-        if (player.games[i].name === gameName) return player.games[i]
+    catch (e) {
+        console.log(e)
     }
-    return null
 }
