@@ -42,7 +42,7 @@ export default class Home extends Component {
                                     keyboardType="default"
                                     defaultValue=""
                                     autoCorrect={false}
-                                    autoCapitalize={true}
+                                    autoCapitalize="words"
                                     maxLength={50}
                                     value={this.state.newPlayerName}
                                     onSubmitEditing={async (e) => {
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     spacer: {
         flex: 1,
         minHeight: 10,
-        minWidgh: 10
+        minWidth: 10
     },
     list: {
         flex: 1,
@@ -189,11 +189,9 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     input: {
-        minWidgh: "100%",
         fontSize: 26,
         backgroundColor: colorStyles.lowerIntenseColor,
         alignSelf: 'stretch',
-        blurOnSubmit: true,
         textAlign: 'center'
     }
 });

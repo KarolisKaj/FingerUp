@@ -14,16 +14,12 @@ export default class Exercise extends Component {
         this.state = {
             windowWidth: Dimensions.get('window').width,
             isTransition: false,
-            pinchScaleThreshold: 0.8,
-            killedTimes: 0,
             timeLeft: 30,
             timer: undefined
         }
     }
 
     componentDidMount() {
-        this.startExplosion()
-        this.startFish();
         this.startTimer();
     }
 
@@ -40,42 +36,14 @@ export default class Exercise extends Component {
             if (this.state.timeLeft < 1) {
                 this.cleanUp();
                 setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
-                setTimeout(function () { this.props.navigation.navigate('Home') }.bind(this), 10000);
+                setTimeout(function () { this.props.navigation.navigate('GameStart') }.bind(this), 10000);
+                return
             }
             else {
                 this.setState({ timeLeft: this.state.timeLeft - 1 })
+                return
             }
         }, 1000);
-    }
-
-    startExplosion() {
-        this.explosionAnimation && this.explosionAnimation.play();
-    }
-
-    endExplosion() {
-        this.explosionAnimation && this.explosionAnimation.play(300, 300);
-        this.explosionAnimation && this.explosionAnimation.pause();
-    }
-
-    startFish() {
-        this.fishAnimation && this.fishAnimation.play();
-    }
-
-    endFish() {
-        this.fishAnimation && this.fishAnimation.play(300, 300);
-        this.fishAnimation && this.fishAnimation.pause();
-    }
-
-    onPinchStateChange(event) {
-        if (this.state.isTransition)
-            return;
-
-        if (event.nativeEvent.oldState === State.ACTIVE && event.nativeEvent.scale < this.state.pinchScaleThreshold) {
-            this.setState({ isTransition: true, killedTimes: this.state.killedTimes + 1 });
-            this.startFish();
-            setTimeout(function () { this.setState({ isTransition: false }); this.startFish(); }.bind(this), 1200);
-            playSound(soundFiles.correctAnswerFile);
-        }
     }
 
     render() {
@@ -85,15 +53,13 @@ export default class Exercise extends Component {
                     <Text>Pinch Fish</Text>
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.bigText}>Score: {this.state.killedTimes}</Text>
                     <Text style={styles.bigText}>Time: {this.state.timeLeft}</Text>
                 </View>
-                <PinchGestureHandler
-                    onHandlerStateChange={this.onPinchStateChange.bind(this)}>
-                    <View style={styles.contentContainer}>
-                        <LottieView style={{ width: this.state.windowWidth * 1 }} source={require('../../styles/animations/movement/flex-arms.json')} ref={fishAnimation => { this.fishAnimation = fishAnimation; }} autoPlay />
-                    </View>
-                </PinchGestureHandler>
+
+                <View style={styles.contentContainer}>
+                    <LottieView style={{ width: this.state.windowWidth * 1 }} source={require('../../styles/animations/movement/flex-arms.json')}
+                        ref={fishAnimation => { this.fishAnimation = fishAnimation; }} autoPlay />
+                </View>
                 {this.state.timeLeft === 0 && <View style={styles.center}>
                     <Animatable.Text style={styles.bigText} animation="pulse" easing="ease-out" iterationCount="infinite">Your score {this.state.killedTimes}!</Animatable.Text>
                 </View>}

@@ -33,7 +33,7 @@ activePlayerId = null
 
 async function createPlayer(name) {
     let player = {
-        id,
+        id: 0,
         name: name,
         games: []
     }
