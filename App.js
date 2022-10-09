@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './views/home'
@@ -14,11 +13,6 @@ import Exercise from './games/exercise/exercise';
 import GameStart from './views/gameStart';
 import FingerUp from './views/fingerup';
 import Movement from './views/movement';
-
-const instructions = Platform.select({
-  ios: `Press Cmd+R to reload,\nCmd+D or shake for dev menu`,
-  android: `Double tap R on your keyboard to reload,\nShake or press menu button for dev menu`,
-});
 
 const Stack = createStackNavigator();
 
