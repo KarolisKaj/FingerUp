@@ -16,7 +16,7 @@ const images = {
     connections: require('../assets/connections.png'),
     matching: require('../assets/matching.png'),
     next: require('../assets/next.png'),
-    next: require('../assets/next.png'),
+    check: require('../assets/check.png'),
 };
 
 export default images;

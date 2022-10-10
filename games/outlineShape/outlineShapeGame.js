@@ -1,80 +1,126 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, StyleSheet, Text, Button, TouchableOpacity, Image, Slider } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image, Slider, Dimensions } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import OutlineShape from './outlineShape';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import ImagesLoader from '../../services/imagesLoader'
+import storage from '../../services/storage'
+
 
 export default class OutlineShapeGame extends Component {
     constructor(props) {
         super(props)
         this.state = {
             currentPage: 0,
-            pages: [{ shape: "B", points: [], score: 50 }, { shape: "A", points: [], score: 50 }, { shape: "C", points: [], score: 50 },],
-            isDrawing: true
+            pages: [{ shape: "A", score: 50, drawingFinished: false, marked: false }, { shape: "B", score: 50, drawingFinished: false, marked: false }, { shape: "C", score: 50, drawingFinished: false, marked: false },],
         }
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                {this.state.currentPage > -1 && <OutlineShape points={this.state.pages[this.state.currentPage].points}
-                    shape={this.state.pages[this.state.currentPage].shape}
-                    style={styles.contentContainer}>
-                </OutlineShape>}
-                <View style={styles.contentContainer}>
-                    <View style={styles.spaceTop}></View>
-                    {this.state.isDrawing && <View style={styles.spaceBottom}>
-                        <TouchableOpacity style={{ ...styles.button, ...{ transform: [{ rotate: '90deg' }] } }}
-                            disabled={this.state.currentPage == 0}
-                            onPress={() => {
-                                this.setState({ currentPage: this.state.currentPage + 1 })
-                                this.forceUpdate()
-                            }}>
-                            <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
-                        </TouchableOpacity></View>}
-                    {!this.state.isDrawing && <View style={styles.spaceBottom}>
-                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == 0 ? 0.1 : 0.85 }, ...{ transform: [{ rotate: '180deg' }] } }}
-                            disabled={this.state.currentPage == 0}
-                            onPress={() => {
-                                this.setState({ currentPage: this.state.currentPage - 1 })
-                                this.forceUpdate()
-                            }}>
-                            <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
-                        </TouchableOpacity>
-                        <View style={styles.container}>
-                            <Text style={{ textAlign: 'center', fontSize: 20 }}>
-                                Mark - {Math.round(this.state.pages[this.state.currentPage].score)}/100
+            <TabView
+                swipeEnabled={false}
+                navigationState={{ index: this.state.currentPage, routes: this.state.pages }}
+                renderScene={(view) => {
+                    let route = view.route
+                    return (
+                        <View key={route.shape} style={styles.container}>
+                            <OutlineShape
+                                style={styles.shapeContainer}
+                                shape={route.shape}
+                                isReadonly={route.drawingFinished}>
+                            </OutlineShape>
+                            {/* <View style={styles.bottomDialsContainer}><Text style={{ textAlign: 'center', fontSize: 200 }}>Hi</Text></View> */}
+                            <View style={styles.bottomDialsContainer}>
+                                <View style={styles.spaceTop}></View>
+                                <View style={styles.spaceBottom}>
+                                    {this.state.pages.every(x => x.drawingFinished) && <View style={styles.sliderContainer}>
+                                        <Text style={{ textAlign: 'center', fontSize: 20 }}>
+                                            Mark - {Math.round(this.state.pages[this.state.currentPage].score)}/100
+                                        </Text>
+                                        <Slider maximumValue={100} style={styles.slider}
+                                            value={this.state.pages[this.state.currentPage].score}
+                                            onValueChange={value => {
+                                                this.state.pages[this.state.currentPage].score = value
+                                                this.setState({ pages: this.state.pages })
+                                            }}></Slider>
+                                    </View>}
+                                    <TouchableOpacity style={{ ...styles.button }}
+                                        onPress={async () => {
+                                            let markingMode = this.state.pages.every(x => x.drawingFinished)
+                                            if (markingMode) {
+                                                this.state.pages[this.state.currentPage].marked = true
+                                                this.setState({ pages: this.state.pages })
+                                                if (this.state.pages.every(x => x.marked)) {
+                                                    await storage.updatePlayer(this.props.route.name, { shapes: this.state.pages.map(x => { return { shape: x.shape, score: x.score } }) })
+                                                    setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
+                                                    setTimeout(function () { this.props.navigation.navigate('GameStart') }.bind(this), 10000);
+                                                } else {
+                                                    for (let i = 0; i < this.state.pages.length; i++) {
+                                                        if (!this.state.pages[i].marked) {
+                                                            this.setState({ currentPage: i })
+                                                            return
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else {
+                                                this.state.pages[this.state.currentPage].drawingFinished = true
+                                                this.setState({ pages: this.state.pages })
+                                                if (this.state.pages.every(x => x.drawingFinished)) {
+                                                    this.setState({ currentPage: 0 })
+                                                } else {
+                                                    for (let i = 0; i < this.state.pages.length; i++) {
+                                                        if (!this.state.pages[i].drawingFinished) {
+                                                            this.setState({ currentPage: i })
+                                                            return
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }}>
+                                        <Image style={styles.innerBtnImage} source={ImagesLoader.check} />
+                                    </TouchableOpacity>
+
+                                </View>
+                            </View>
+                        </View>)
+                }}
+                onIndexChange={(index) => this.setState({ currentPage: index })}
+                renderTabBar={props =>
+                    <TabBar
+                        {...props}
+                        renderLabel={({ route, focused, color }) => (
+                            <Text key={route.shape} style={{ color, marginTop: 30, fontSize: 22 }}>
+                                {route.shape}
                             </Text>
-                            <Slider maximumValue={100} style={styles.slider}
-                                value={this.state.pages[this.state.currentPage].score}
-                                onValueChange={value => {
-                                    this.state.pages[this.state.currentPage].score = value
-                                    this.setState({ pages: this.state.pages })
-                                }}></Slider>
-                        </View>
-                        <TouchableOpacity style={{ ...styles.button, ...{ opacity: this.state.currentPage == this.state.pages.length - 1 ? 0.1 : 0.85 } }}
-                            disabled={this.state.currentPage == this.state.pages.length - 1}
-                            onPress={() => {
-                                this.setState({ currentPage: this.state.currentPage + 1 })
-                                this.forceUpdate()
-                            }}>
-                            <Image style={styles.innerBtnImage} source={require('../../assets/next.png')} />
-                        </TouchableOpacity>
-                    </View>}
-                </View>
-            </View>
+                        )}
+                        onTabPress={({ route, preventDefault }) => {
+                            this.setState({ currentPage: this.state.pages.indexOf(route) })
+                        }}
+                    />
+                }
+            />
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
         flex: 1,
         backgroundColor: colorStyles.lowIntenseColor,
-        flexDirection: 'column',
     },
     spaceTop: {
-        flex: 7
+        flex: 1
+    },
+    shapeContainer: {
+        topMargin: '50%'
+    },
+    bottomDialsContainer: {
+        flex: 1,
+        flexDirection: 'column',
     },
     spaceBottom: {
         flex: 1,
@@ -82,14 +128,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         flexDirection: 'row',
     },
-    contentContainer: {
-        position: "absolute",
-        top: 0, left: 0,
-        right: 0, bottom: 0,
-        minWidth: '100%',
-        minHeight: '100%',
+    sliderContainer: {
         flex: 1,
-        // alignItems:'stretch'
+        alignItems: 'stretch',
+        justifyContent: 'space-around',
+        flexDirection: 'column',
+        selfAlign: 'stretch'
     },
     button: {
         flexGrow: 1,
@@ -107,18 +151,21 @@ const styles = StyleSheet.create({
         maxHeight: 100,
         maxWidth: 100,
         aspectRatio: 1,
-        margin: '1%',
+        margin: '5%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     innerBtnImage: {
-        flex: 1.5,
-        aspectRatio: 1,
+        flex: 1,
+        maxHeight: '80%',
         aspectRatio: 1,
         alignSelf: 'center',
-
     },
     slider: {
         color: colorStyles.mediumIntenseColor,
         padding: 0,
-        margin: 10
+        margin: 10,
+        selfAlign: 'stretch'
+
     }
 })

@@ -3,7 +3,7 @@
 //     name,
 //     games: [
 //         name,
-//         gameResults,
+//         gameResults: [],
 //     ]
 // }
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -39,7 +39,6 @@ async function createPlayer(name) {
     }
     try {
         let allKeys = new Set(await AsyncStorage.getAllKeys())
-        console.log(allKeys)
         for (let i = 0; true; i++) {
             if (allKeys.size === i || !allKeys.has(String(i))) {
                 let key = String(i)
@@ -55,7 +54,7 @@ async function createPlayer(name) {
 
 async function getPlayer() {
     try {
-        storedPlayerString = await AsyncStorage.getItem(activePlayerId)
+        let storedPlayerString = await AsyncStorage.getItem(activePlayerId)
         if (storedPlayerString !== null) {
             return JSON.parse(storedPlayerString)
         }
@@ -92,28 +91,22 @@ function setActivePlayer(id) {
 
 async function updatePlayer(gameName, gameResult) {
     try {
-        player = await this.getPlayer(activePlayerId)
-        if (player.games === null) {
-            player.games = [{
-                name: gameName,
-                gamesReults: [gameResult]
-            }]
-        } else {
-            player.games.forEach((game, index) => {
+        let player = await getPlayer()
+        let gameExists = player.games.some(x => x.name === gameName)
+        if (gameExists) {
+            for (let i = 0; i < player.games.length; i++) {
+                let game = player.games[i];
                 if (game.name === gameName) {
-                    game.gameResult.append(gameResult)
-                    return
+                    game.gameResults.push(gameResult)
                 }
-                if (index === player.games.length - 1) {
-                    player.games.append({
-                        name: gameName,
-                        gameResults: [gameResult]
-                    })
-                    return
-                }
-            });
+            }
+        } else {
+            player.games.push({
+                name: gameName,
+                gameResults: [gameResult]
+            })
         }
-        await storage.setItem(activePlayerId, JSON.stringify(player))
+        await AsyncStorage.setItem(activePlayerId, JSON.stringify(player))
     }
     catch (e) {
         console.log(e)
@@ -122,7 +115,7 @@ async function updatePlayer(gameName, gameResult) {
 
 async function getGame(gameName) {
     try {
-        player = await this.getPlayer(activePlayerId)
+        let player = await getPlayer(activePlayerId)
         if (player === null || player.games === null) {
             return null
         }

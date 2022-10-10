@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, Text, StyleSheet, Platform, ReactNativeComponentTree } from 'react-native';
+import { View, Text, StyleSheet, Platform, ReactNativeComponentTree, Dimensions } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import ReactDOMServer from 'react-dom/server';
 import Svg, {
@@ -16,8 +16,8 @@ export default class OutlineShape extends Component {
         this.state = {
             currentPath: null,
             shape: props.shape,
-            points: props.points,
-            isReadonly: props.points.length == 0
+            points: [],
+            isReadonly: props.isReadonly
         }
     }
 
@@ -40,7 +40,7 @@ export default class OutlineShape extends Component {
     // Like if there is no points between two borders in the middle of the letter then we are sure its bad already.
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container} height='100%' width='100%'>
                 <Svg style={styles.contentContainer} height='100%' width='100%' fill="#000000"
                     onLayout={(e) => {
                     }
@@ -48,7 +48,10 @@ export default class OutlineShape extends Component {
                 >
                     <SvgText fill="#FFFFFF" x="50%" y="75%" textAnchor="middle" fontSize="512"
                         onMoveShouldSetResponder={() => true}
-                        onStartShouldSetResponder={() => true}
+                        onStartShouldSetResponder={() => {
+                            this.setState({ points: [], currentPath: null })
+                            return true
+                        }}
 
                         onResponderMove={(e) => {
                             this.state.points.push([e.nativeEvent.locationX, e.nativeEvent.locationY]);
@@ -56,7 +59,6 @@ export default class OutlineShape extends Component {
                         }}
                         onResponderRelease={() => {
                             // TODO: set viewing state here?
-                            this.setState({ points: [], currentPath: null })
                             // TODO: Validate that whole path was within letter and whole letter is completed.
                         }}
                         onLayout={(e) => {
@@ -79,13 +81,11 @@ export default class OutlineShape extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 2,
         backgroundColor: colorStyles.lowIntenseColor,
         flexDirection: 'column',
     },
     contentContainer: {
-        position: "absolute",
-        top: 0, left: 0,
-        right: 0, bottom: 0,
+        flex: 2,
     }
 })
