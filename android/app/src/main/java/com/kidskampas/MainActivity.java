@@ -1,4 +1,4 @@
-package com.kidskampas;
+package com.fingerup;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

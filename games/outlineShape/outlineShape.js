@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, Text, StyleSheet, Platform, ReactNativeComponentTree, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
-import ReactDOMServer from 'react-dom/server';
 import Svg, {
     Text as SvgText,
     Path,
 } from 'react-native-svg';
-import simplifySvgPath from '@luncheon/simplify-svg-path';
+import simplifySvgPath from './svgPath';
 
 
 export default class OutlineShape extends Component {

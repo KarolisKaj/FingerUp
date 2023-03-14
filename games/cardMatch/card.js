@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import CardFlip from 'react-native-card-flip';
+import FlipCard from 'react-native-flip-card';
 import colorStyles from '../../styles/colorStyles'
 
 export default class Card extends Component {
@@ -28,10 +28,10 @@ export default class Card extends Component {
 
     render() {
         return (
-            <CardFlip style={styles.cardContainer} ref={(card) => this.card = card} >
+            <FlipCard style={styles.cardContainer} ref={(card) => this.card = card} >
                 <TouchableOpacity style={styles.closedCard} onPress={() => this.flipCard()} ><Text style={{color: colorStyles.lowIntenseColor}}>Open me!</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.openedCard} ><Text>{this.state.displayValue}</Text></TouchableOpacity>
-            </CardFlip>
+            </FlipCard>
         );
     }
 }

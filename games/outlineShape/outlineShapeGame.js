@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, Slider, Dimensions } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import Slider from '@react-native-community/slider'
 import colorStyles from '../../styles/colorStyles'
 import OutlineShape from './outlineShape';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { TabView, TabBar } from 'react-native-tab-view';
 import ImagesLoader from '../../services/imagesLoader'
 import storage from '../../services/storage'
 
@@ -13,13 +14,13 @@ export default class OutlineShapeGame extends Component {
         super(props)
         this.state = {
             currentPage: 0,
-            pages: [{ shape: "A", score: 50, drawingFinished: false, marked: false }, { shape: "B", score: 50, drawingFinished: false, marked: false }, { shape: "C", score: 50, drawingFinished: false, marked: false },],
+            pages: [{ key: 1, shape: "A", score: 50, drawingFinished: false, marked: false }, { key: 2, shape: "B", score: 50, drawingFinished: false, marked: false }, { key: 3, shape: "C", score: 50, drawingFinished: false, marked: false },],
         }
     }
 
     render() {
         return (
-            <TabView
+            <TabView key={1}
                 swipeEnabled={false}
                 navigationState={{ index: this.state.currentPage, routes: this.state.pages }}
                 renderScene={(view) => {

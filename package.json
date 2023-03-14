@@ -1,5 +1,6 @@
 {
   "main": "index.js",
+  "appName": "FingerUp",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
@@ -8,8 +9,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@luncheon/simplify-svg-path": "^0.1.4",
     "@react-native-async-storage/async-storage": "^1.17.10",
+    "@react-native-community/slider": "^4.4.2",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
@@ -31,7 +32,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-shape": "^1.1.2",
     "react-native-svg": "13.4.0",
-    "react-native-tab-view": "^3.2.1",
+    "react-native-tab-view": "^3.5.1",
     "react-native-unimodules": "~0.13.3",
     "react-native-web": "^0.18.12"
   },
