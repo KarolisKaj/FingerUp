@@ -22,15 +22,14 @@ export default class Card extends Component {
     flipCard() {
         if (this.state.locked) return
         let self = this;
-        this.card.flip()
         this.setState({ isFlipped: !this.state.isFlipped }, (() => this.state.notifyFlipped(this.state.displayValue, this.props.id, this.state.isFlipped, self)).bind(self));
     }
 
     render() {
         return (
-            <FlipCard style={styles.cardContainer} ref={(card) => this.card = card} >
-                <TouchableOpacity style={styles.closedCard} onPress={() => this.flipCard()} ><Text style={{color: colorStyles.lowIntenseColor}}>Open me!</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.openedCard} ><Text>{this.state.displayValue}</Text></TouchableOpacity>
+            <FlipCard style={styles.cardContainer} flip={this.state.isFlipped} flipHorizontal={true} flipVertical={true} friction={6}>
+                <View style={styles.closedCard}><Text style={{ color: colorStyles.lowIntenseColor }}>Open me!</Text></View>
+                <View style={styles.openedCard}><Text>{this.state.displayValue}</Text></View>
             </FlipCard>
         );
     }
@@ -38,6 +37,7 @@ export default class Card extends Component {
 
 const styles = StyleSheet.create({
     cardContainer: {
+        flexDirection: 'row',
         flex: 1,
         alignItems: 'center',
         margin: 5
