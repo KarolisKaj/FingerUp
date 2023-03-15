@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import FlipCard from 'react-native-flip-card';
 import colorStyles from '../../styles/colorStyles'
 
@@ -15,21 +15,25 @@ export default class Card extends Component {
         }
     }
 
-    lockCard() {
-        this.setState({ locked: true })
+    resetCard() {
+        this.setState({ locked: false, isFlipped: false })
     }
 
-    flipCard() {
+    flipCardUp() {
+        this.setState({ isFlipped: true, locked: true })
+    }
+
+    notifyParent() {
         if (this.state.locked) return
         let self = this;
-        this.setState({ isFlipped: !this.state.isFlipped }, (() => this.state.notifyFlipped(this.state.displayValue, this.props.id, this.state.isFlipped, self)).bind(self));
+        this.state.notifyFlipped(self)
     }
 
     render() {
         return (
-            <FlipCard style={styles.cardContainer} flip={this.state.isFlipped} flipHorizontal={true} flipVertical={true} friction={6}>
-                <View style={styles.closedCard}><Text style={{ color: colorStyles.lowIntenseColor }}>Open me!</Text></View>
-                <View style={styles.openedCard}><Text>{this.state.displayValue}</Text></View>
+            <FlipCard style={styles.cardContainer} ref={(card) => this.card = card} clickable={false} flip={this.state.isFlipped} flipHorizontal={true} flipVertical={true} friction={6}>
+                <TouchableOpacity style={styles.closedCard} onPress={() => this.notifyParent()}><Text style={{ color: colorStyles.lowIntenseColor }}>Open me!</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.openedCard} ><Text>{this.state.displayValue}</Text></TouchableOpacity>
             </FlipCard>
         );
     }
