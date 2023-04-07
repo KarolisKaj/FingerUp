@@ -24,7 +24,7 @@ export default class Home extends Component {
 
     render() {
         return (
-            <ImageBackground source={images.beach_image} style={styles.bckgrndImage}>
+            <ImageBackground source={images.background} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <Modal
                         animationType="slide"
@@ -107,14 +107,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 40,
         margin: 10,
-        color: colorStyles.lowIntenseColor
+        color: colorStyles.intenseColor
     },
     button: {
         flexGrow: 1,
         flexShrink: 1,
         alignSelf: 'center',
         borderRadius: 20,
-        backgroundColor: colorStyles.mediumIntenseColor,
+        backgroundColor: colorStyles.lowIntenseColor,
         opacity: 0.85,
         elevation: 2,
         shadowColor: 'rgba(0,0,0, .4)', // IOS
@@ -145,13 +145,13 @@ const styles = StyleSheet.create({
     },
     list: {
         flex: 1,
-        borderColor: colorStyles.mediumIntenseColor,
+        borderColor: colorStyles.lowIntenseColor,
         width: '100%'
     },
     listBtn: {
         flex: 1,
         borderRadius: 20,
-        backgroundColor: colorStyles.mediumIntenseColor,
+        backgroundColor: colorStyles.lowIntenseColor,
         margin: 10,
         fontSize: 26
     },

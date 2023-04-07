@@ -5,8 +5,7 @@ import Dot from './connectDotsDot.js'
 import Svg, {
     Line,
 } from 'react-native-svg';
-import playSound from '../../services/audioService';
-import soundFiles from '../../services/soundFileLocations'
+import playSounds from '../../services/audioService';
 
 function createDots(dotsCount, shapeCoordinates) {
     let firstCoordinates = shapeCoordinates[0][0]
@@ -71,9 +70,9 @@ export default class ConnectDotsBoard extends Component {
                         currentLines.push((<Line key={this.state.lines.length} x1={startDot.ref.current.state.X + r} y1={startDot.ref.current.state.Y - this.state.offsetY + r} x2={endDot.ref.current.state.X + r} y2={endDot.ref.current.state.Y - this.state.offsetY + r} stroke="green" strokeWidth="5" />))
                         this.setState({ lines: currentLines })
                         this.updateStartEnd()
-                        playSound(soundFiles.correctAnswerFile);
+                        playSounds.feedback.playCorrectAnswer();
                     } else {
-                        playSound(soundFiles.wrongAnswerFile);
+                        playSounds.feedback.playWrongAnswer();
                     }
                     this.setState({ draggedX: 0, draggedY: 0, startedX: 0, startedY: 0, lineColor: 'transparent' })
                 }
@@ -150,7 +149,7 @@ export default class ConnectDotsBoard extends Component {
             <View style={styles.boardContainer} onLayout={this.setCoordinates} ref={view => { this.feedPost = view; }}>
                 {this.state.board.map((line, index) => (<View key={index} style={styles.rowContainer}>{line.map(dot => dot.element)}</View>))}
                 <View {...this.panResponder.panHandlers} style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }}>
-                    <Svg style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0}} >
+                    <Svg style={{ height: "100%", width: "100%", margin: 0, padding: 0, position: 'absolute', top: 0, left: 0 }} >
                         <Svg>
                             <Line key={-1} x1={this.state.startedX} y1={this.state.startedY} x2={this.state.draggedX} y2={this.state.draggedY} stroke={this.state.lineColor} strokeWidth="5" />
                         </Svg>

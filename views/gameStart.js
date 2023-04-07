@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import colorStyles from '../styles/colorStyles'
+import images from '../services/imagesLoader'
+
 
 export default class GameHome extends Component {
     constructor(props) {
@@ -15,7 +17,7 @@ export default class GameHome extends Component {
 
     render() {
         return (
-            <ImageBackground source={require('../assets/beach_image.png')} style={styles.bckgrndImage}>
+            <ImageBackground source={images.background} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
                         <Text style={styles.welcome}>Hello dear traveler, choose an area to play in!</Text>
@@ -69,14 +71,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 40,
         margin: 10,
-        color: colorStyles.lowIntenseColor
+        color: colorStyles.intenseColor
     },
     button: {
         flexGrow: 1,
         flexShrink: 1,
         alignSelf: 'center',
         borderRadius: 20,
-        backgroundColor: colorStyles.mediumIntenseColor,
+        backgroundColor: colorStyles.lowIntenseColor,
         opacity: 0.85,
         elevation: 2,
         shadowColor: 'rgba(0,0,0, .4)', // IOS

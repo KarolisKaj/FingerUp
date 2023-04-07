@@ -4,8 +4,7 @@ import colorStyles from '../../styles/colorStyles'
 import Draggable from 'react-native-draggable';
 import { Square, Rectangle, Circle, Oval, Octagon, Trapezoid, Triangle, Hexagon, Pentagon } from 'react-native-shape';
 import * as Animatable from 'react-native-animatable';
-import playSound from '../../services/audioService';
-import soundFiles from '../../services/soundFileLocations'
+import playSounds from '../../services/audioService';
 import Images from '../../services/imagesLoader'
 
 export default class SeaMatch extends Component {
@@ -14,11 +13,11 @@ export default class SeaMatch extends Component {
         this.state = {
             timeLeft: 30,
             timer: undefined,
-            shapeCount: 6,
+            shapeCount: 8,
             sizeOfShape: 60,
             margin: 30,
-            oneSpaceHeight: Dimensions.get('window').height / 7,
-            colors: ['green', 'purple', 'black', 'red', 'blue', 'orange', 'magenta'],
+            oneSpaceHeight: Dimensions.get('window').height / 9,
+            colors: ['green', 'purple', 'black', 'brown', 'blue', 'orange', 'magenta', "pink"],
             shapes: undefined,
             allShapes: undefined,
             shapesMap: undefined,
@@ -37,11 +36,11 @@ export default class SeaMatch extends Component {
     }
 
     playCorrectSound() {
-        playSound(soundFiles.correctAnswerFile);
+        playSounds.feedback.playCorrectAnswer();
     }
 
     playWrongSound() {
-        playSound(soundFiles.wrongAnswerFile);
+        playSounds.feedback.playWrongAnswer();
     }
 
     componentWillUnmount() {
@@ -56,13 +55,19 @@ export default class SeaMatch extends Component {
         createShape = (color, shapeSize, image) => {
             return <Image style={[styles.shape, { tintColor: color, maxWidth: shapeSize, maxHeight: shapeSize }]} source={image} />
         }
+        createShapeSvg = (color, shapeSize, image) => {
+            return image([styles.shape, { stroke: "red", fill: color, maxWidth: shapeSize, maxHeight: shapeSize }])
+        }
         this.state.shapes = [
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.crab),
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.dolphin),
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.jellyfish),
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.octopus),
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.turtle),
-            (color) => createShape(color, this.state.sizeOfShape, Images.seaAnimals.whale)]
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.brachiosaurus style={imageStyle} height="80" width="80"></Images.dinosaurs.brachiosaurus>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.gorgonopsia style={imageStyle} height="80" width="80"></Images.dinosaurs.gorgonopsia>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.parasaurolophus style={imageStyle} height="80" width="80"></Images.dinosaurs.parasaurolophus>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.plesiosaurus style={imageStyle} height="80" width="80"></Images.dinosaurs.plesiosaurus>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.pterosaur style={imageStyle} height="80" width="80"></Images.dinosaurs.pterosaur>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.stegosaurus style={imageStyle} height="80" width="80"></Images.dinosaurs.stegosaurus>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.styracosaurus style={imageStyle} height="80" width="80"></Images.dinosaurs.styracosaurus>)),
+            (color) => createShapeSvg(color, this.state.sizeOfShape, (imageStyle) => (<Images.dinosaurs.tyrannosaurus style={imageStyle} height="80" width="80"></Images.dinosaurs.tyrannosaurus>))
+        ]
         let slots = this.getRandomArray();
         let shapes = this.getRandomArray();
         this.state.shapesMap = Array(this.state.shapeCount).fill().map((_, i) => {

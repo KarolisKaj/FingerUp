@@ -5,7 +5,7 @@ import colorStyles from '../../styles/colorStyles'
 import Board from './connectDotsBoard'
 import shapes from './dotShapes'
 import * as Animatable from 'react-native-animatable';
-
+import Header from '../../views/components/header.js'
 
 export default class ConnectDots extends Component {
     constructor(props) {
@@ -41,9 +41,8 @@ export default class ConnectDots extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text>Connect Dots</Text>
-                </View>
+                <Header style={styles.textContainer} title="Connect Dots">
+                </Header>
                 <View style={styles.textContainer}>
                     <Text style={styles.bigText}>Time: {this.state.timeElapsed}</Text>
                 </View>

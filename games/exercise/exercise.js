@@ -4,8 +4,6 @@ import colorStyles from '../../styles/colorStyles'
 import LottieView from 'lottie-react-native';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler'
 import * as Animatable from 'react-native-animatable';
-import playSound from '../../services/audioService';
-import soundFiles from '../../services/soundFileLocations'
 
 
 export default class Exercise extends Component {

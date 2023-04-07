@@ -17,53 +17,21 @@ import Movement from './views/movement';
 const Stack = createStackNavigator();
 
 export default function App() {
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-        />
-        <Stack.Screen
-          name="GameStart"
-          component={GameStart}
-        />
-        <Stack.Screen
-          name="GameOfLife"
-          component={GameOfLife}
-        />
-        <Stack.Screen
-          name="CardMatch"
-          component={CardMatch}
-        />
-        <Stack.Screen
-          name="PinchFish"
-          component={PinchFish}
-        />
-        <Stack.Screen
-          name="SeaMatch"
-          component={SeaMatch}
-        />
-        <Stack.Screen
-          name="OutlineShapeGame"
-          component={OutlineShapeGame}
-        />
-        <Stack.Screen
-          name="ConnectDots"
-          component={ConnectDots}
-        />
-        <Stack.Screen
-          name="FingerUp"
-          component={FingerUp}
-        />
-        <Stack.Screen
-          name="Movement"
-          component={Movement}
-        />
-        <Stack.Screen
-          name="Exercise"
-          component={Exercise}
-        />
+        <Stack.Screen name="Home" component={Home}  />
+        <Stack.Screen name="GameStart" component={GameStart} />
+        <Stack.Screen name="GameOfLife" component={GameOfLife} />
+        <Stack.Screen name="CardMatch" component={CardMatch} />
+        <Stack.Screen name="PinchFish" component={PinchFish} />
+        <Stack.Screen name="SeaMatch" component={SeaMatch} />
+        <Stack.Screen name="OutlineShapeGame" component={OutlineShapeGame} />
+        <Stack.Screen name="ConnectDots" component={ConnectDots} />
+        <Stack.Screen name="FingerUp" component={FingerUp} />
+        <Stack.Screen name="Movement" component={Movement} />
+        <Stack.Screen name="Exercise" component={Exercise} />
       </Stack.Navigator>
     </NavigationContainer>
   );

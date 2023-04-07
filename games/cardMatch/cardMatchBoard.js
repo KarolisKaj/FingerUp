@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from "react-native";
 import Card from './card.js'
-import playSound from '../../services/audioService';
-import soundFiles from '../../services/soundFileLocations'
+import playSounds from '../../services/audioService';
 
 
 function generateBoard(size, notifyFlipped) {
@@ -60,7 +59,7 @@ export default class CardMatchBoard extends Component {
                         this.state.onFinished()
                     }
                 })
-                playSound(soundFiles.correctAnswerFile);
+                playSounds.feedback.playCorrectAnswer();
             }
             else {
                 setTimeout(function () {
@@ -68,7 +67,7 @@ export default class CardMatchBoard extends Component {
                     this.state.secondCardFlipped.resetCard()
                     this.setState({ firstCardFlipped: undefined, secondCardFlipped: undefined })
                 }.bind(this), this.state.flipDelay);
-                playSound(soundFiles.wrongAnswerFile);
+                playSounds.feedback.playWrongAnswer();
             }
         }
     }

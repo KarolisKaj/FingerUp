@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Image } from 'react-native';
 import colorStyles from '../styles/colorStyles'
+import images from '../services/imagesLoader'
 
 export default class Movement extends Component {
     constructor(props) {
@@ -9,7 +10,7 @@ export default class Movement extends Component {
 
     render() {
         return (
-            <ImageBackground source={require('../assets/beach_image.png')} style={styles.bckgrndImage}>
+            <ImageBackground source={images.background} style={styles.bckgrndImage}>
                 <View style={styles.container}>
                     <View style={styles.textContainer}>
                         <Text style={styles.welcome}>Choose a game to play!</Text>
@@ -51,13 +52,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 40,
         margin: 10,
-        color: colorStyles.lowIntenseColor
+        color: colorStyles.intenseColor
     },
     button: {
         flex: 1,
         alignSelf: 'center',
         borderRadius: 20,
-        backgroundColor: colorStyles.mediumIntenseColor,
+        backgroundColor: colorStyles.lowIntenseColor,
         opacity: 0.85,
         elevation: 2,
         shadowColor: 'rgba(0,0,0, .4)', // IOS
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         minHeight: 100,
-        maxHeight:300,
+        maxHeight: 300,
         aspectRatio: 1,
         margin: '1%'
     },

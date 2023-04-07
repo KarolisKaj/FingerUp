@@ -4,10 +4,12 @@ import colorStyles from '../../styles/colorStyles'
 import LottieView from 'lottie-react-native';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler'
 import * as Animatable from 'react-native-animatable';
-import playSound from '../../services/audioService';
-import soundFiles from '../../services/soundFileLocations'
-import storage from '../../services/storage'
-
+import playSounds from '../../services/audioService';
+import Header from '../../views/components/header.js'
+import Images from '../../services/imagesLoader'
+import Svg, {
+    Circle,
+} from 'react-native-svg';
 
 export default class PinchFish extends Component {
     constructor(props) {
@@ -75,16 +77,15 @@ export default class PinchFish extends Component {
             this.setState({ isTransition: true, killedTimes: this.state.killedTimes + 1 });
             this.startFish();
             setTimeout(function () { this.setState({ isTransition: false }); this.startFish(); }.bind(this), 1200);
-            playSound(soundFiles.correctAnswerFile);
+            playSounds.feedback.playCorrectAnswer();
         }
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text>Pinch Fish</Text>
-                </View>
+                <Header style={styles.textContainer} title="Pinch Fish">
+                </Header>
                 <View style={styles.textContainer}>
                     <Text style={styles.bigText}>Score: {this.state.killedTimes}</Text>
                     <Text style={styles.bigText}>Time: {this.state.timeLeft}</Text>
@@ -97,9 +98,23 @@ export default class PinchFish extends Component {
                             <LottieView style={{ width: this.state.windowWidth * 1 }} source={require('../../styles/animations/pinch/explosion.json')} ref={explosionAnimation => { this.explosionAnimation = explosionAnimation; }} />}
                     </View>
                 </PinchGestureHandler>
-                {this.state.timeLeft === 0 && <View style={styles.center}>
-                    <Animatable.Text style={styles.bigText} animation="pulse" easing="ease-out" iterationCount="infinite">Your score {this.state.killedTimes}!</Animatable.Text>
-                </View>}
+                {this.state.timeLeft === 0 && <Animatable.View animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.center}>
+                    <View style={styles.center}>
+                        <Text style={{...styles.bigText, marginVertical:100 }}>Well done! Your score is {this.state.killedTimes}!</Text>
+                        <Svg height="100" width="100" viewBox="0 0 100 100">
+                            <Circle
+                                cx="50"
+                                cy="50"
+                                r="50"
+                                fill="green"
+                            />
+                            <Images.thumbsUp fill="white" width="100" height="100" viewBox="0 0 525 525"></Images.thumbsUp>
+                        </Svg>
+
+                    </View>
+                </Animatable.View>}
+
+
             </View >
         );
     }
