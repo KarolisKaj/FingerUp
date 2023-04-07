@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import colorStyles from '../../styles/colorStyles'
+import { View, Platform, PixelRatio, InteractionManager } from 'react-native';
 import Svg, {
     Text as SvgText,
     Circle
@@ -17,6 +16,7 @@ export default class ConnectDotsDot extends Component {
             radius: 20,
             startEndState: props.startEndState
         };
+
         this.setCoordinates = this.setCoordinates.bind(this);
         this.measureRec = this.measureRec.bind(this);
         this.renderState = this.renderState.bind(this);
@@ -27,8 +27,17 @@ export default class ConnectDotsDot extends Component {
     }
 
     setCoordinates(e) {
-        var target = e.currentTarget;
-        this.measureRec(target)
+        if (Platform.OS === 'ios') {
+            let self = this.feedPost
+            InteractionManager.runAfterInteractions(() => {
+                self.measureInWindow((x, y, width, height) => {
+                    this.setState({ X: x, Y: y });
+                });
+            })
+        } else {
+            let target = e.currentTarget;
+            this.measureRec(target)
+        }
     }
 
     measureRec(target) {
@@ -36,6 +45,16 @@ export default class ConnectDotsDot extends Component {
             this.setState({ X: px, Y: py })
             if (px !== this.state.X || py !== this.state.Y) {
                 this.measureRec(target)
+            }
+        }), 250)
+    }
+
+    measureInWindow(target) {
+        setTimeout(() => target.measureInWindow((x, y, width, height) => {
+            this.setState({ X: x, Y: y })
+            console.log(`x - ${x}, y - ${y} `)
+            if (x !== this.state.X || y !== this.state.Y) {
+                this.measureInWindow(target)
             }
         }), 250)
     }
@@ -50,11 +69,3 @@ export default class ConnectDotsDot extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    cell: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: colorStyles.lowIntenseColor
-    }
-});
