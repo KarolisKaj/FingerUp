@@ -7,7 +7,8 @@ export default class Card extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            displayValue: props.displayValue,
+            matchId: props.matchId,
+            image: props.image,
             isFlipped: false,
             notifyFlipped: props.notifyFlipped,
             locked: false,
@@ -33,7 +34,7 @@ export default class Card extends Component {
         return (
             <FlipCard style={styles.cardContainer} ref={(card) => this.card = card} clickable={false} flip={this.state.isFlipped} flipHorizontal={true} flipVertical={true} friction={6}>
                 <TouchableOpacity style={styles.closedCard} onPress={() => this.notifyParent()}><Text style={{ color: colorStyles.lowIntenseColor }}>Open me!</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.openedCard} ><Text>{this.state.displayValue}</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.openedCard} >{this.state.image}</TouchableOpacity>
             </FlipCard>
         );
     }

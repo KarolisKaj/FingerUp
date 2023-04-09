@@ -2,16 +2,24 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from "react-native";
 import Card from './card.js'
 import playSounds from '../../services/audioService';
+import imageLoader from '../../services/imagesLoader'
 
 
 function generateBoard(size, notifyFlipped) {
-    let possibleValues = (size * size / 2)
+    let possibleValues = Math.floor(size * size / 2)
     let board = []
-    for (let i = 0; i < possibleValues; i++) {
+    let i = 0
+    let colors = ['green', 'purple', 'black', 'brown', 'blue', 'orange', 'magenta', "pink"]
+    for (const [key, Value] of Object.entries(imageLoader.dinosaurs)) {
+        console.log(`${key}: ${Value}`);
         let cardRef1 = React.createRef()
-        board.push({ element: (<Card key={`1x${i}`} id={`1x${i}`} ref={cardRef1} displayValue={i} notifyFlipped={notifyFlipped}></Card>), ref: cardRef1 });
+        board.push({ element: (<Card key={`1x${i}`} id={`1x${i}`} ref={cardRef1} image={<Value style={{ fill: colors[i] }} height="80%" width="80%" />} matchId={i} notifyFlipped={notifyFlipped}></Card>), ref: cardRef1 });
         let cardRef2 = React.createRef()
-        board.push({ element: (<Card key={`2x${i}`} id={`2x${i}`} ref={cardRef2} displayValue={i} notifyFlipped={notifyFlipped}></Card>), ref: cardRef2 });
+        board.push({ element: (<Card key={`2x${i}`} id={`2x${i}`} ref={cardRef2} image={<Value style={{ fill: colors[i] }} height="80%" width="80%" />} matchId={i} notifyFlipped={notifyFlipped}></Card>), ref: cardRef2 });
+        i = i + 1
+        if (i >= possibleValues) {
+            break
+        }
     }
     board.sort((_, __) => {
         if (Math.random() > 0.5) {
@@ -19,7 +27,7 @@ function generateBoard(size, notifyFlipped) {
         }
         return -1
     })
-    
+
     let result = []
     while (board.length) {
         result.push(board.splice(0, size));
@@ -53,7 +61,7 @@ export default class CardMatchBoard extends Component {
         else if (this.state.secondCardFlipped === undefined) {
             this.state.secondCardFlipped = card
             this.state.secondCardFlipped.flipCardUp()
-            if (this.state.secondCardFlipped.state.displayValue === this.state.firstCardFlipped.state.displayValue && this.state.firstCardFlipped.state.id !== this.state.secondCardFlipped.state.id) {
+            if (this.state.secondCardFlipped.state.matchId === this.state.firstCardFlipped.state.matchId && this.state.firstCardFlipped.state.id !== this.state.secondCardFlipped.state.id) {
                 this.setState({ firstCardFlipped: undefined, secondCardFlipped: undefined, totalFoundCards: this.state.totalFoundCards + 2 }, () => {
                     if (this.state.boardSize * this.state.boardSize === this.state.totalFoundCards) {
                         this.state.onFinished()
