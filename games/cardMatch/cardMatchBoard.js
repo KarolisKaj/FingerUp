@@ -10,8 +10,7 @@ function generateBoard(size, notifyFlipped) {
     let board = []
     let i = 0
     let colors = ['green', 'purple', 'black', 'brown', 'blue', 'orange', 'magenta', "pink"]
-    for (const [key, Value] of Object.entries(imageLoader.dinosaurs)) {
-        console.log(`${key}: ${Value}`);
+    for (const [_, Value] of Object.entries(imageLoader.dinosaurs)) {
         let cardRef1 = React.createRef()
         board.push({ element: (<Card key={`1x${i}`} id={`1x${i}`} ref={cardRef1} image={<Value style={{ fill: colors[i] }} height="80%" width="80%" />} matchId={i} notifyFlipped={notifyFlipped}></Card>), ref: cardRef1 });
         let cardRef2 = React.createRef()
