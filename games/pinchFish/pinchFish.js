@@ -3,13 +3,9 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import colorStyles from '../../styles/colorStyles'
 import LottieView from 'lottie-react-native';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler'
-import * as Animatable from 'react-native-animatable';
 import playSounds from '../../services/audioService';
 import Header from '../../views/components/header.js'
-import Images from '../../services/imagesLoader'
-import Svg, {
-    Circle,
-} from 'react-native-svg';
+import EndText from '../components/endText';
 
 export default class PinchFish extends Component {
     constructor(props) {
@@ -19,7 +15,7 @@ export default class PinchFish extends Component {
             isTransition: false,
             pinchScaleThreshold: 0.8,
             killedTimes: 0,
-            timeLeft: 30,
+            timeLeft: 1,
             timer: undefined
         }
     }
@@ -98,21 +94,7 @@ export default class PinchFish extends Component {
                             <LottieView style={{ width: this.state.windowWidth * 1 }} source={require('../../styles/animations/pinch/explosion.json')} ref={explosionAnimation => { this.explosionAnimation = explosionAnimation; }} />}
                     </View>
                 </PinchGestureHandler>
-                {this.state.timeLeft === 0 && <Animatable.View animation="pulse" easing="ease-out" iterationCount="infinite" style={styles.center}>
-                    <View style={styles.center}>
-                        <Text style={{...styles.bigText, marginVertical:100 }}>Well done! Your score is {this.state.killedTimes}!</Text>
-                        <Svg height="100" width="100" viewBox="0 0 100 100">
-                            <Circle
-                                cx="50"
-                                cy="50"
-                                r="50"
-                                fill="green"
-                            />
-                            <Images.thumbsUp fill="white" width="100" height="100" viewBox="0 0 525 525"></Images.thumbsUp>
-                        </Svg>
-
-                    </View>
-                </Animatable.View>}
+                {this.state.timeLeft === 0 && <EndText text={`Well done! Your score is ${this.state.killedTimes}!`}></EndText>}
 
 
             </View >
