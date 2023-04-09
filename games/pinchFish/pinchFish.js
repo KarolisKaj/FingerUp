@@ -15,7 +15,7 @@ export default class PinchFish extends Component {
             isTransition: false,
             pinchScaleThreshold: 0.8,
             killedTimes: 0,
-            timeLeft: 1,
+            timeLeft: 30,
             timer: undefined
         }
     }
