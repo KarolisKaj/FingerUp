@@ -8,13 +8,24 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import ImagesLoader from '../../services/imagesLoader'
 import storage from '../../services/storage'
 
+function generatePages() {
+    result = []
+    alphabet = [...Array(26).keys()].map(i => String.fromCharCode(i + 'A'.charCodeAt(0)))
+    return [...new Array(5).keys()].map(i => {
+        let randomIndex = Math.floor(Math.random() * alphabet.length);
+        let result = { key: i, shape: alphabet[randomIndex], score: 50, drawingFinished: false, marked: false }
+        alphabet.splice(randomIndex, 1)
+        return result
+    })
+
+}
 
 export default class OutlineShapeGame extends Component {
     constructor(props) {
         super(props)
         this.state = {
             currentPage: 0,
-            pages: [{ key: 1, shape: "A", score: 50, drawingFinished: false, marked: false }, { key: 2, shape: "B", score: 50, drawingFinished: false, marked: false }, { key: 3, shape: "C", score: 50, drawingFinished: false, marked: false },],
+            pages: generatePages(),
         }
     }
 
