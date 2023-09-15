@@ -55,8 +55,8 @@ export default class OutlineShapeGame extends Component {
                                                 this.setState({ pages: this.state.pages })
                                                 if (this.state.pages.every(x => x.marked)) {
                                                     await storage.updatePlayer(this.props.route.name, { shapes: this.state.pages.map(x => { return { shape: x.shape, score: x.score } }) })
-                                                    setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
                                                     setTimeout(function () { this.props.navigation.navigate('GameStart') }.bind(this), 10000);
+                                                    this.props.navigation.navigate('GameOfLife')
                                                 } else {
                                                     for (let i = 0; i < this.state.pages.length; i++) {
                                                         if (!this.state.pages[i].marked) {
