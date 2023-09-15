@@ -22,7 +22,8 @@ export default class GameOfLife extends Component {
         super(props)
         this.state = {
             boardState: generateBoard(20),
-            isSpinning: true
+            isSpinning: true,
+            lastExecution: 0
         }
         window.requestAnimationFrame(this.startSpining.bind(this));
     }
@@ -31,9 +32,13 @@ export default class GameOfLife extends Component {
         this.stopSpinning()
     }
 
-    startSpining() {
+    startSpining(ts) {
+        console.log(ts)
         if (this.state.isSpinning === true) {
-            MakeTurn(this.state.boardState)
+            if (ts - this.state.lastExecution > 50) {
+                MakeTurn(this.state.boardState)
+                this.state.lastExecution = ts
+            }
             window.requestAnimationFrame(this.startSpining.bind(this))
         }
     }
