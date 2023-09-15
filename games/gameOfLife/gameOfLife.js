@@ -33,7 +33,6 @@ export default class GameOfLife extends Component {
     }
 
     startSpining(ts) {
-        console.log(ts)
         if (this.state.isSpinning === true) {
             if (ts - this.state.lastExecution > 50) {
                 MakeTurn(this.state.boardState)

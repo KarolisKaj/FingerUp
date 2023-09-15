@@ -52,7 +52,6 @@ export default class ConnectDotsDot extends Component {
     measureInWindow(target) {
         setTimeout(() => target.measureInWindow((x, y, width, height) => {
             this.setState({ X: x, Y: y })
-            console.log(`x - ${x}, y - ${y} `)
             if (x !== this.state.X || y !== this.state.Y) {
                 this.measureInWindow(target)
             }

@@ -61,7 +61,6 @@ export default class OutlineShape extends Component {
                             // TODO: Validate that whole path was within letter and whole letter is completed.
                         }}
                         onLayout={(e) => {
-                            // console.log(e.target)
                         }
                         }
                     >{this.state.shape}</SvgText>

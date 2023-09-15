@@ -46,7 +46,6 @@ export default class Home extends Component {
                                     maxLength={50}
                                     value={this.state.newPlayerName}
                                     onSubmitEditing={async (e) => {
-                                        console.log(e.nativeEvent.text)
                                         let id = await storage.createPlayer(e.nativeEvent.text)
                                         storage.setActivePlayer(id)
                                         this.setState({ newPlayerName: "", showCreatePlayerModal: false })
