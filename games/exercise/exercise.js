@@ -4,6 +4,7 @@ import colorStyles from '../../styles/colorStyles'
 import LottieView from 'lottie-react-native';
 import { PinchGestureHandler, State } from 'react-native-gesture-handler'
 import * as Animatable from 'react-native-animatable';
+import Header from '../../views/components/header.js'
 
 
 export default class Exercise extends Component {
@@ -47,9 +48,8 @@ export default class Exercise extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text>Pinch Fish</Text>
-                </View>
+                <Header style={styles.textContainer} title="Exercise">
+                </Header>
                 <View style={styles.textContainer}>
                     <Text style={styles.bigText}>Time: {this.state.timeLeft}</Text>
                 </View>

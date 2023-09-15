@@ -6,6 +6,7 @@ import { Square, Rectangle, Circle, Oval, Octagon, Trapezoid, Triangle, Hexagon,
 import * as Animatable from 'react-native-animatable';
 import playSounds from '../../services/audioService';
 import Images from '../../services/imagesLoader'
+import Header from '../../views/components/header.js'
 
 export default class SeaMatch extends Component {
     constructor(props) {
@@ -131,9 +132,7 @@ export default class SeaMatch extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text>Sea Match</Text>
-                </View>
+                <Header style={styles.textContainer} title="Sea Match"></Header>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.bigText}>Time passed: {this.state.timeElapsed}</Text>
                 </View>

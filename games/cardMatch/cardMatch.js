@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import CardMatchBoard from './cardMatchBoard.js'
 import * as Animatable from 'react-native-animatable';
 import colorStyles from '../../styles/colorStyles'
+import Header from '../../views/components/header.js'
 
 export default class CardMatch extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export default class CardMatch extends Component {
             hasFinished: false
         };
     }
-    
+
     gameFinished() {
         setTimeout(function () { this.setState({ hasFinished: true }) }.bind(this), 1000);
         setTimeout(function () { this.props.navigation.navigate('GameOfLife') }.bind(this), 5000);
@@ -21,9 +22,7 @@ export default class CardMatch extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.textContainer}>
-                    <Text>Card Game</Text>
-                </View>
+                <Header style={styles.textContainer} title="Card Game"></Header>
                 <View style={styles.boardContainer}>
                     <CardMatchBoard flipDelay={2000} onFinished={this.gameFinished.bind(this)}></CardMatchBoard>
                 </View>
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         backgroundColor: colorStyles.lowIntenseColor
-     },
+    },
     textContainer: {
         flex: 1,
         alignItems: 'center'
