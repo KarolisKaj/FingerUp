@@ -1,0 +1,187 @@
+.pinch-board {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  background: radial-gradient(circle at 50% 55%, #fff7e8 0%, #fff 60%);
+  overflow: hidden;
+}
+
+.pinch-object {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  animation: pinch-arrive 0.5s cubic-bezier(0.3, 1.5, 0.5, 1);
+  pointer-events: none;
+}
+
+.pinch-fruit {
+  width: 100%;
+  height: 100%;
+  /* Spring back when the fingers let go. */
+  transition: transform 0.35s cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+
+.pinch-object.live .pinch-fruit {
+  transition: none;
+}
+
+.pinch-object.done-pinch .pinch-fruit {
+  animation: pinch-squish 0.45s ease-in forwards;
+}
+
+.pinch-flower {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.pinch-object.done-spread .pinch-flower {
+  animation: pinch-sway 1.2s ease-in-out;
+}
+
+.pinch-finger {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 50%;
+  background: rgba(90, 184, 240, 0.18);
+  border: 4px solid rgba(90, 184, 240, 0.7);
+  pointer-events: none;
+}
+
+.pinch-line {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pinch-dots {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.pinch-dots span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--line);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.pinch-dots span.filled {
+  background: var(--mint);
+  transform: scale(1.2);
+}
+
+/* Two ghost fingertips demonstrating the gesture. */
+.pinch-hint {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.pinch-hint span {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-radius: 50%;
+  background: rgba(255, 138, 91, 0.35);
+  border: 4px solid rgba(255, 138, 91, 0.9);
+}
+
+.hint-pinch span:first-child {
+  animation: hint-pinch-a 1.4s ease-in-out infinite;
+}
+.hint-pinch span:last-child {
+  animation: hint-pinch-b 1.4s ease-in-out infinite;
+}
+.hint-spread span:first-child {
+  animation: hint-pinch-a 1.4s ease-in-out infinite reverse;
+}
+.hint-spread span:last-child {
+  animation: hint-pinch-b 1.4s ease-in-out infinite reverse;
+}
+
+@keyframes hint-pinch-a {
+  0%,
+  15% {
+    transform: translate(-130px, -90px);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    transform: translate(-30px, -20px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-30px, -20px);
+    opacity: 0;
+  }
+}
+
+@keyframes hint-pinch-b {
+  0%,
+  15% {
+    transform: translate(130px, 90px);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    transform: translate(30px, 20px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(30px, 20px);
+    opacity: 0;
+  }
+}
+
+@keyframes pinch-arrive {
+  from {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes pinch-squish {
+  0% {
+    transform: scale(0.55, 1.18);
+  }
+  40% {
+    transform: scale(1.35, 0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6, 0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes pinch-sway {
+  0%,
+  100% {
+    transform: rotate(0) scale(1);
+  }
+  30% {
+    transform: rotate(-6deg) scale(1.08);
+  }
+  65% {
+    transform: rotate(5deg) scale(1.04);
+  }
+}
