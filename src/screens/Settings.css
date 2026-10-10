@@ -1,0 +1,107 @@
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.settings-list h2 {
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding: 16px 0;
+  border-bottom: 2px solid var(--bg);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row > div:first-child {
+  flex: 1 1 260px;
+}
+
+.setting-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.setting-hint {
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+.segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  padding: 4px;
+  gap: 4px;
+  background: var(--bg);
+  border-radius: 999px;
+}
+
+.segmented button {
+  min-height: 48px;
+  min-width: 56px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.segmented button.active {
+  background: var(--sky-deep);
+  color: #fff;
+}
+
+.toggle {
+  position: relative;
+  width: 76px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: var(--line);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.toggle span {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease;
+}
+
+.toggle.on {
+  background: var(--mint);
+}
+
+.toggle.on span {
+  transform: translateX(32px);
+}
+
+.slider {
+  width: 220px;
+  accent-color: var(--sky-deep);
+  height: 44px;
+}
+
+.danger-zone .setting-title {
+  color: var(--danger);
+}

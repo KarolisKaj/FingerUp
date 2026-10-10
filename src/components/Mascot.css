@@ -1,0 +1,104 @@
+.mascot {
+  overflow: visible;
+}
+
+.mascot-body {
+  transform-origin: 100px 180px;
+}
+
+.mascot-idle .mascot-body {
+  animation: pip-breathe 3.2s ease-in-out infinite;
+}
+
+.mascot-idle .mascot-eyes {
+  transform-origin: 100px 106px;
+  animation: pip-blink 4.5s infinite;
+}
+
+.mascot-happy .mascot-body {
+  animation: pip-hop 0.9s ease-in-out infinite;
+}
+
+.mascot-cheer .mascot-body {
+  animation: pip-jump 0.8s cubic-bezier(0.3, 0, 0.4, 1) infinite;
+}
+
+.mascot-cheer .mascot-shadow,
+.mascot-happy .mascot-shadow {
+  transform-origin: 100px 188px;
+  animation: pip-shadow 0.8s ease-in-out infinite;
+}
+
+.mascot-antenna-star {
+  transform-origin: 118px 20px;
+  animation: pip-wiggle 1.6s ease-in-out infinite;
+}
+
+@keyframes pip-breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.03, 0.97);
+  }
+}
+
+@keyframes pip-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+@keyframes pip-hop {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+  50% {
+    transform: translateY(-10px) scale(0.98, 1.02);
+  }
+}
+
+@keyframes pip-jump {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.08, 0.92);
+  }
+  15% {
+    transform: translateY(0) scale(0.96, 1.05);
+  }
+  50% {
+    transform: translateY(-28px) scale(1, 1) rotate(-4deg);
+  }
+  85% {
+    transform: translateY(0) scale(1.06, 0.94);
+  }
+}
+
+@keyframes pip-shadow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.7);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pip-wiggle {
+  0%,
+  100% {
+    transform: rotate(-12deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+}

@@ -1,0 +1,25 @@
+.star-jar {
+  display: flex;
+  gap: 4px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+
+.star-jar span {
+  display: flex;
+}
+
+.star-earned {
+  animation: star-pop 0.6s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@keyframes star-pop {
+  0% {
+    transform: scale(0.2) rotate(-40deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
