@@ -102,3 +102,236 @@
     transform: rotate(12deg);
   }
 }
+
+/* ---------- Movement poses ("Move with Pip") ----------
+   Limbs hang straight down at 0deg; positive angles swing the left arm outwards/up,
+   negative angles swing the right arm outwards/up (180deg = straight up). */
+
+.mascot-posing .mascot-body {
+  animation: none;
+}
+
+.mascot-figure,
+.mascot-foot {
+  transform-box: view-box;
+}
+
+.mascot-limb {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+}
+
+.mascot-figure {
+  transform-origin: 100px 180px;
+}
+
+.mascot-limb-left {
+  transform: rotate(35deg);
+}
+.mascot-limb-right {
+  transform: rotate(-35deg);
+}
+
+/* Reach up high */
+.mascot-pose-armsUp .mascot-limb-left {
+  animation: pip-reach-left 1.6s ease-in-out infinite;
+}
+.mascot-pose-armsUp .mascot-limb-right {
+  animation: pip-reach-right 1.6s ease-in-out infinite;
+}
+.mascot-pose-armsUp .mascot-figure {
+  animation: pip-stretch 1.6s ease-in-out infinite;
+}
+
+/* Clap: hands meet in front of the tummy on every beat */
+.mascot-pose-clap .mascot-limb-left {
+  animation: pip-clap-left 0.6s ease-in-out infinite;
+}
+.mascot-pose-clap .mascot-limb-right {
+  animation: pip-clap-right 0.6s ease-in-out infinite;
+}
+
+/* Wave hello with the right hand up by the head */
+.mascot-pose-wave .mascot-limb-right {
+  animation: pip-wave 0.45s ease-in-out infinite alternate;
+}
+.mascot-pose-wave .mascot-figure {
+  animation: pip-breathe 1.6s ease-in-out infinite;
+}
+
+/* Jump with arms up */
+.mascot-pose-jump .mascot-figure {
+  animation: pip-jump-big 0.6s cubic-bezier(0.3, 0, 0.4, 1) infinite;
+}
+.mascot-pose-jump .mascot-limb-left {
+  transform: rotate(150deg);
+}
+.mascot-pose-jump .mascot-limb-right {
+  transform: rotate(-150deg);
+}
+.mascot-pose-jump .mascot-shadow {
+  transform-origin: 100px 188px;
+  animation: pip-shadow 0.6s ease-in-out infinite;
+}
+
+/* Stomp: feet lift in turn, arms march */
+.mascot-pose-stomp .mascot-figure {
+  animation: pip-bob 0.6s ease-in-out infinite;
+}
+.mascot-pose-stomp .mascot-foot-left {
+  animation: pip-foot 1.2s ease-in-out infinite;
+}
+.mascot-pose-stomp .mascot-foot-right {
+  animation: pip-foot 1.2s ease-in-out infinite 0.6s;
+}
+.mascot-pose-stomp .mascot-limb-left {
+  animation: pip-march-left 1.2s ease-in-out infinite;
+}
+.mascot-pose-stomp .mascot-limb-right {
+  animation: pip-march-right 1.2s ease-in-out infinite;
+}
+
+/* Turn around */
+.mascot-pose-spin .mascot-figure {
+  transform-origin: 100px 112px;
+  animation: pip-turn 1.8s ease-in-out infinite;
+}
+
+/* Wiggle with arms out */
+.mascot-pose-wiggle .mascot-figure {
+  animation: pip-wiggle-body 0.5s ease-in-out infinite alternate;
+}
+.mascot-pose-wiggle .mascot-limb-left {
+  transform: rotate(95deg);
+}
+.mascot-pose-wiggle .mascot-limb-right {
+  transform: rotate(-95deg);
+}
+
+@keyframes pip-reach-left {
+  0%,
+  100% {
+    transform: rotate(35deg);
+  }
+  50% {
+    transform: rotate(165deg);
+  }
+}
+@keyframes pip-reach-right {
+  0%,
+  100% {
+    transform: rotate(-35deg);
+  }
+  50% {
+    transform: rotate(-165deg);
+  }
+}
+@keyframes pip-stretch {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0.96, 1.08);
+  }
+}
+@keyframes pip-clap-left {
+  0%,
+  100% {
+    transform: rotate(50deg);
+  }
+  50% {
+    transform: rotate(-62deg);
+  }
+}
+@keyframes pip-clap-right {
+  0%,
+  100% {
+    transform: rotate(-50deg);
+  }
+  50% {
+    transform: rotate(62deg);
+  }
+}
+@keyframes pip-wave {
+  from {
+    transform: rotate(-130deg);
+  }
+  to {
+    transform: rotate(-170deg);
+  }
+}
+@keyframes pip-jump-big {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.08, 0.92);
+  }
+  15% {
+    transform: translateY(0) scale(0.95, 1.06);
+  }
+  50% {
+    transform: translateY(-36px);
+  }
+  85% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+}
+@keyframes pip-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+@keyframes pip-foot {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-18px);
+  }
+}
+@keyframes pip-march-left {
+  0%,
+  100% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(60deg);
+  }
+}
+@keyframes pip-march-right {
+  0%,
+  100% {
+    transform: rotate(-60deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
+}
+@keyframes pip-turn {
+  0%,
+  15% {
+    transform: scaleX(1);
+  }
+  40%,
+  60% {
+    transform: scaleX(-1);
+  }
+  85%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+@keyframes pip-wiggle-body {
+  from {
+    transform: rotate(-9deg);
+  }
+  to {
+    transform: rotate(9deg);
+  }
+}

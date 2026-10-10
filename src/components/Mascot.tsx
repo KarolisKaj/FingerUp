@@ -1,12 +1,30 @@
 import './Mascot.css'
 
 export type MascotMood = 'idle' | 'happy' | 'cheer'
+/** Movement demonstrations for the "Move with Pip" game. */
+export type MascotPose = 'clap' | 'armsUp' | 'wave' | 'jump' | 'stomp' | 'spin' | 'wiggle'
 
 /** "Pip": a round, friendly helper who celebrates with the child. Pure SVG + CSS animation. */
-export function Mascot({ mood = 'idle', size = 180 }: { mood?: MascotMood; size?: number }) {
+export function Mascot({ mood = 'idle', size = 180, pose }: { mood?: MascotMood; size?: number; pose?: MascotPose }) {
   const cheering = mood === 'cheer'
+  const arms = (
+    <>
+      <g className="mascot-arm mascot-arm-left">
+        <path d={cheering ? 'M50 110 Q26 86 22 62' : 'M50 118 Q30 128 26 146'} stroke="#3A8FD8" strokeWidth="14" fill="none" strokeLinecap="round" />
+      </g>
+      <g className="mascot-arm mascot-arm-right">
+        <path d={cheering ? 'M150 110 Q174 86 178 62' : 'M150 118 Q170 128 174 146'} stroke="#3A8FD8" strokeWidth="14" fill="none" strokeLinecap="round" />
+      </g>
+    </>
+  )
   return (
-    <svg className={`mascot mascot-${mood}`} width={size} height={size} viewBox="0 0 200 200" aria-hidden="true">
+    <svg
+      className={`mascot mascot-${mood} ${pose ? `mascot-posing mascot-pose-${pose}` : ''}`}
+      width={size}
+      height={size}
+      viewBox="0 0 200 200"
+      aria-hidden="true"
+    >
       <defs>
         <radialGradient id="pip-body" cx="0.38" cy="0.32" r="0.75">
           <stop offset="0" stopColor="#8FE0FF" />
@@ -17,6 +35,7 @@ export function Mascot({ mood = 'idle', size = 180 }: { mood?: MascotMood; size?
 
       <ellipse className="mascot-shadow" cx="100" cy="188" rx="52" ry="8" fill="rgba(29,53,87,0.15)" />
 
+      <g className="mascot-figure">
       <g className="mascot-body">
         {/* Antenna with a little star */}
         <path d="M100 52 Q104 30 116 20" stroke="#3A8FD8" strokeWidth="6" fill="none" strokeLinecap="round" />
@@ -29,17 +48,12 @@ export function Mascot({ mood = 'idle', size = 180 }: { mood?: MascotMood; size?
           strokeLinejoin="round"
         />
 
-        {/* Arms: raised when cheering */}
-        <g className="mascot-arm mascot-arm-left">
-          <path d={cheering ? 'M50 110 Q26 86 22 62' : 'M50 118 Q30 128 26 146'} stroke="#3A8FD8" strokeWidth="14" fill="none" strokeLinecap="round" />
-        </g>
-        <g className="mascot-arm mascot-arm-right">
-          <path d={cheering ? 'M150 110 Q174 86 178 62' : 'M150 118 Q170 128 174 146'} stroke="#3A8FD8" strokeWidth="14" fill="none" strokeLinecap="round" />
-        </g>
+        {/* Arms behind the body normally; in front while demonstrating a movement. */}
+        {!pose && arms}
 
         {/* Feet */}
-        <ellipse cx="76" cy="176" rx="18" ry="10" fill="#3A8FD8" />
-        <ellipse cx="124" cy="176" rx="18" ry="10" fill="#3A8FD8" />
+        <ellipse className="mascot-foot mascot-foot-left" cx="76" cy="176" rx="18" ry="10" fill="#3A8FD8" />
+        <ellipse className="mascot-foot mascot-foot-right" cx="124" cy="176" rx="18" ry="10" fill="#3A8FD8" />
 
         {/* Body */}
         <circle cx="100" cy="112" r="64" fill="url(#pip-body)" />
@@ -69,6 +83,22 @@ export function Mascot({ mood = 'idle', size = 180 }: { mood?: MascotMood; size?
         ) : (
           <path d="M80 126 Q100 156 120 126 Z" fill="#1D3557" stroke="#1D3557" strokeWidth="4" strokeLinejoin="round" />
         )}
+        {pose && (
+          // Longer arms that pivot at the shoulders so movements read clearly.
+          <>
+            <g transform="translate(44 132)">
+              <g className="mascot-limb mascot-limb-left">
+                <path d="M0 0 L0 50" stroke="#3A8FD8" strokeWidth="15" strokeLinecap="round" />
+              </g>
+            </g>
+            <g transform="translate(156 132)">
+              <g className="mascot-limb mascot-limb-right">
+                <path d="M0 0 L0 50" stroke="#3A8FD8" strokeWidth="15" strokeLinecap="round" />
+              </g>
+            </g>
+          </>
+        )}
+      </g>
       </g>
     </svg>
   )
