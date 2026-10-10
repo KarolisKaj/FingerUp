@@ -243,7 +243,7 @@ export function PinchRound({ round, level, settings, plan, active, complete }: R
       ))}
 
       {showHint && !done && size.w > 0 && (
-        <div className={`pinch-hint hint-${mode}`} style={{ left: center.x, top: center.y }} aria-hidden="true">
+        <div className={`pinch-hint hint-${mode} motion-essential`} style={{ left: center.x, top: center.y }} aria-hidden="true">
           <span />
           <span />
         </div>

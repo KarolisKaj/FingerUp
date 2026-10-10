@@ -163,10 +163,12 @@ h3 {
   color: var(--ink-soft);
 }
 
+/* Calm decorative motion for people who ask for it, but keep demonstrations the child must
+   see to know what to do (marked .motion-essential), such as Pip's movements. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  :not(.motion-essential, .motion-essential *),
+  :not(.motion-essential, .motion-essential *)::before,
+  :not(.motion-essential, .motion-essential *)::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

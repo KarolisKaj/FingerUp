@@ -86,7 +86,7 @@ export function MoveRound({ round, settings, plan, active, complete }: RoundProp
 
   return (
     <div ref={boardRef} className="move-board">
-      <div className="move-stage">
+      <div className="move-stage motion-essential">
         <Mascot mood="idle" pose={active ? action.id : undefined} size={size} />
       </div>
       <div className="move-label">
