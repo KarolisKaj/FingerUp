@@ -1,8 +1,8 @@
-.dots-screen .topbar h1 {
+.game-screen .topbar h1 {
   text-align: center;
 }
 
-.dots-board {
+.game-board {
   position: relative;
   flex: 1;
   min-height: 0;
@@ -10,16 +10,32 @@
   background: var(--surface);
   box-shadow: var(--shadow);
   overflow: hidden;
+  /* The play area owns every touch: no scrolling, zooming or back-swipes while playing. */
+  touch-action: none;
 }
 
-.dots-canvas {
+/* A canvas that fills the board. */
+.board-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
-  /* The canvas owns every touch: no scrolling, zooming or back-swipes while drawing. */
   touch-action: none;
+}
+
+.praise-art {
+  animation: praise-bounce 0.9s ease-in-out infinite;
+}
+
+@keyframes praise-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+  50% {
+    transform: translateY(-14px) scale(0.98, 1.02);
+  }
 }
 
 .overlay {

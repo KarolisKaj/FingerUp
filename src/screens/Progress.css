@@ -8,7 +8,7 @@
 
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 16px;
 }
 
@@ -66,4 +66,42 @@
 .note {
   font-size: 15px;
   line-height: 1.5;
+}
+
+.game-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.game-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.game-tabs button.active {
+  color: #fff;
+}
+
+.tab-count {
+  min-width: 26px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 14px;
+}
+
+.skill-line {
+  margin: 0;
+  font-size: 16px;
 }

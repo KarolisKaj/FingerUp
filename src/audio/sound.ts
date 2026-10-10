@@ -23,6 +23,7 @@ class SoundEngine {
   private ctx: AudioContext | null = null
   private out: GainNode | null = null
   private reverbSend: GainNode | null = null
+  private noise: AudioBuffer | null = null
   private volume = 0.8
   private calm = false
 
@@ -65,6 +66,7 @@ class SoundEngine {
     reverbSend.gain.value = 0.28
     reverbSend.connect(reverb).connect(out)
 
+    this.noise = this.whiteNoise(ctx)
     this.ctx = ctx
     this.out = out
     this.reverbSend = reverbSend
@@ -78,6 +80,84 @@ class SoundEngine {
       for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 3)
     }
     return buffer
+  }
+
+  private whiteNoise(ctx: AudioContext) {
+    const buffer = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate)
+    const data = buffer.getChannelData(0)
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1
+    return buffer
+  }
+
+  /** Filtered noise burst: claps, splashes, card swishes. */
+  private burst({
+    at = 0,
+    duration = 0.15,
+    gain = 0.2,
+    freq = 1200,
+    q = 1,
+    sweepTo,
+  }: {
+    at?: number
+    duration?: number
+    gain?: number
+    freq?: number
+    q?: number
+    sweepTo?: number
+  }) {
+    const ctx = this.ctx
+    if (!ctx || !this.out || !this.noise || !this.reverbSend) return
+    const t = ctx.currentTime + 0.01 + at
+    const src = ctx.createBufferSource()
+    src.buffer = this.noise
+    const filter = ctx.createBiquadFilter()
+    filter.type = 'bandpass'
+    filter.Q.value = q
+    filter.frequency.setValueAtTime(freq, t)
+    if (sweepTo) filter.frequency.exponentialRampToValueAtTime(sweepTo, t + duration)
+    const env = ctx.createGain()
+    env.gain.setValueAtTime(0, t)
+    env.gain.linearRampToValueAtTime(gain, t + 0.005)
+    env.gain.exponentialRampToValueAtTime(0.0001, t + duration)
+    src.connect(filter).connect(env)
+    env.connect(this.out)
+    env.connect(this.reverbSend)
+    src.start(t, Math.random() * 0.5)
+    src.stop(t + duration + 0.05)
+  }
+
+  /** A pitch glide: boings, pops and slides. */
+  private glide({
+    from,
+    to,
+    at = 0,
+    duration = 0.2,
+    gain = 0.2,
+    type = 'sine',
+  }: {
+    from: number
+    to: number
+    at?: number
+    duration?: number
+    gain?: number
+    type?: OscillatorType
+  }) {
+    const ctx = this.ctx
+    if (!ctx || !this.out || !this.reverbSend) return
+    const t = ctx.currentTime + 0.01 + at
+    const osc = ctx.createOscillator()
+    osc.type = type
+    osc.frequency.setValueAtTime(from, t)
+    osc.frequency.exponentialRampToValueAtTime(to, t + duration)
+    const env = ctx.createGain()
+    env.gain.setValueAtTime(0, t)
+    env.gain.linearRampToValueAtTime(gain, t + 0.01)
+    env.gain.exponentialRampToValueAtTime(0.0001, t + duration)
+    osc.connect(env)
+    env.connect(this.out)
+    env.connect(this.reverbSend)
+    osc.start(t)
+    osc.stop(t + duration + 0.05)
   }
 
   private tone({ freq, at = 0, duration = 0.6, gain = 0.3, bell = true, type = 'sine' }: ToneOptions) {
@@ -145,6 +225,107 @@ class SoundEngine {
     // Quiet fifth below for warmth.
     this.tone({ freq: SCALE[n] / 1.5, duration: 0.7, gain: 0.08, bell: false })
     this.sparkles(2, 0.05, 0.2)
+  }
+
+  /** Bubble pop: a quick wet "plip" plus a bell note, so a run of pops makes a tune. */
+  pop(index = Math.floor(Math.random() * 8)) {
+    this.glide({ from: 1400, to: 380, duration: 0.09, gain: 0.22 })
+    this.burst({ duration: 0.05, gain: 0.08, freq: 3000, q: 0.8 })
+    this.tone({ freq: SCALE[MELODY[index % MELODY.length]], at: 0.03, duration: 0.6, gain: 0.16 })
+  }
+
+  /** Rising soft ticks while fingers pinch or spread (level 1..3). */
+  stretch(level: number) {
+    this.tone({ freq: SCALE[level * 2], duration: 0.25, gain: 0.1 })
+  }
+
+  /** Juicy squish: a low boing and a splash. */
+  squish() {
+    this.glide({ from: 320, to: 120, duration: 0.25, gain: 0.3, type: 'triangle' })
+    this.burst({ at: 0.02, duration: 0.3, gain: 0.18, freq: 900, q: 0.7, sweepTo: 300 })
+    ;[4, 5, 7].forEach((n, i) => this.tone({ freq: SCALE[n], at: 0.12 + i * 0.07, duration: 0.6, gain: 0.14 }))
+  }
+
+  /** A flower opening: fast harp-like upward sweep. */
+  bloom() {
+    ;[0, 1, 2, 3, 4, 5, 6, 7].forEach((n, i) => this.tone({ freq: SCALE[n], at: i * 0.045, duration: 0.9, gain: 0.12 }))
+    this.sparkles(5, 0.3, 0.6)
+  }
+
+  /** Bouncy "boing" for characters landing or jumping. */
+  boing() {
+    this.glide({ from: 220, to: 520, duration: 0.18, gain: 0.18 })
+    this.glide({ from: 520, to: 300, at: 0.16, duration: 0.2, gain: 0.12 })
+  }
+
+  /** Card turning over. */
+  flip() {
+    this.burst({ duration: 0.12, gain: 0.12, freq: 1800, q: 1.5, sweepTo: 4000 })
+  }
+
+  /** Two things belong together (cards match, piece fits its shadow). */
+  match() {
+    this.tone({ freq: SCALE[4], duration: 0.7, gain: 0.22 })
+    this.tone({ freq: SCALE[7], at: 0.1, duration: 0.9, gain: 0.22 })
+    this.sparkles(3, 0.15, 0.4)
+  }
+
+  /** A soft landing: piece dropped into place. */
+  place() {
+    this.glide({ from: 300, to: 160, duration: 0.12, gain: 0.25, type: 'triangle' })
+  }
+
+  /** A piece gliding back home: quiet and neutral, never a "wrong" sound. */
+  slideBack() {
+    this.glide({ from: 520, to: 360, duration: 0.3, gain: 0.08 })
+  }
+
+  /** Harp pluck for painting; index walks the scale (0 = low). */
+  pluck(index: number) {
+    const i = Math.max(0, Math.min(SCALE.length - 1, index))
+    this.tone({ freq: SCALE[i], duration: 0.7, gain: 0.1 })
+  }
+
+  /** Hand clap for the movement game's beat. */
+  clap(at = 0) {
+    this.burst({ at, duration: 0.09, gain: 0.3, freq: 1500, q: 0.9 })
+    this.burst({ at: at + 0.012, duration: 0.12, gain: 0.18, freq: 1100, q: 0.9 })
+  }
+
+  /** Soft drum for marching/stomping. */
+  drum(at = 0) {
+    this.glide({ from: 150, to: 55, at, duration: 0.25, gain: 0.45 })
+  }
+
+  /**
+   * Continuous "swish" while wiping. Returns a handle: set the intensity (0..1) as the
+   * finger moves and stop it when done.
+   */
+  wipe() {
+    const ctx = this.ctx
+    if (!ctx || !this.out || !this.noise) return { set: () => {}, stop: () => {} }
+    const src = ctx.createBufferSource()
+    src.buffer = this.noise
+    src.loop = true
+    const filter = ctx.createBiquadFilter()
+    filter.type = 'bandpass'
+    filter.frequency.value = 900
+    filter.Q.value = 0.6
+    const env = ctx.createGain()
+    env.gain.value = 0
+    src.connect(filter).connect(env).connect(this.out)
+    src.start()
+    return {
+      set: (intensity: number) => {
+        const v = Math.max(0, Math.min(1, intensity))
+        env.gain.setTargetAtTime(v * 0.12, ctx.currentTime, 0.05)
+        filter.frequency.setTargetAtTime(600 + v * 1400, ctx.currentTime, 0.08)
+      },
+      stop: () => {
+        env.gain.setTargetAtTime(0, ctx.currentTime, 0.05)
+        src.stop(ctx.currentTime + 0.3)
+      },
+    }
   }
 
   /** Gentle, low "boop-boop": not wrong, just try again. */

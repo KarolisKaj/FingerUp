@@ -1,8 +1,8 @@
 import { HashRouter, Route, Routes } from 'react-router'
-import { ConnectDots } from './games/connectDots/ConnectDots'
 import { GameMenu } from './screens/GameMenu'
 import { Home } from './screens/Home'
 import { NotFound } from './screens/NotFound'
+import { PlayGame } from './screens/PlayGame'
 import { Progress } from './screens/Progress'
 import { Settings } from './screens/Settings'
 import { Tools } from './screens/Tools'
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/child/:childId" element={<GameMenu />} />
         <Route path="/child/:childId/settings" element={<Settings />} />
         <Route path="/child/:childId/progress" element={<Progress />} />
-        <Route path="/child/:childId/play/connect-dots" element={<ConnectDots />} />
+        <Route path="/child/:childId/play/:gameId" element={<PlayGame />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </HashRouter>

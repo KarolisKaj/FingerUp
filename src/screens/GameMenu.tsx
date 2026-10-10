@@ -30,26 +30,18 @@ export function GameMenu() {
 
       <div className="screen-scroll">
         <div className="game-grid">
-          {games.map((game) =>
-            game.ready ? (
-              <Link
-                key={game.id}
-                to={`play/${game.id}`}
-                className="game-tile"
-                style={{ background: game.color }}
-                onClick={() => sound.unlock()}
-              >
-                <div className="game-icon">{game.icon}</div>
-                <span className="game-title">{game.title}</span>
-              </Link>
-            ) : (
-              <div key={game.id} className="game-tile locked" style={{ background: game.color }} aria-disabled="true">
-                <div className="game-icon">{game.icon}</div>
-                <span className="game-title">{game.title}</span>
-                <span className="game-soon">Coming soon</span>
-              </div>
-            ),
-          )}
+          {games.map((game) => (
+            <Link
+              key={game.id}
+              to={`play/${game.id}`}
+              className="game-tile"
+              style={{ background: game.color }}
+              onClick={() => sound.unlock()}
+            >
+              <div className="game-icon">{game.icon}</div>
+              <span className="game-title">{game.title}</span>
+            </Link>
+          ))}
         </div>
       </div>
     </div>

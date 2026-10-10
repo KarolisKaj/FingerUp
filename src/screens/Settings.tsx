@@ -2,7 +2,8 @@ import type { ReactNode } from 'react'
 import { useNavigate, Link } from 'react-router'
 import { sound } from '../audio/sound'
 import { BackIcon } from '../components/icons'
-import { childSettings, db, deleteChild, type ChildSettings, type Difficulty, type Tolerance } from '../db/db'
+import { childSettings, db, deleteChild, levelFor, type ChildSettings, type Difficulty, type Tolerance } from '../db/db'
+import { games } from '../games/registry'
 import { useChild } from '../hooks/useChild'
 import { NotFound } from './NotFound'
 import './Settings.css'
@@ -83,26 +84,32 @@ export function Settings() {
       <div className="screen-scroll">
         <div className="settings-list">
           <section className="card">
-            <h2>Games</h2>
-            <Row title="Difficulty" hint="Connect the Dots: 3×3, 4×4 or 5×5 dots with longer pictures.">
-              <Segmented<Difficulty>
-                value={settings.difficulty}
-                onChange={(difficulty) => update({ difficulty })}
-                options={[
-                  { value: 'easy', label: 'Easy' },
-                  { value: 'medium', label: 'Medium' },
-                  { value: 'hard', label: 'Hard' },
-                ]}
-              />
-            </Row>
-            <Row title="Rounds per session" hint="How many pictures before the big celebration.">
+            <h2>Levels</h2>
+            {games.map((game) => (
+              <Row key={game.id} title={game.title} hint={game.levels[levelFor(settings, game.id)]}>
+                <Segmented<Difficulty>
+                  value={levelFor(settings, game.id)}
+                  onChange={(level) => update({ levels: { ...settings.levels, [game.id]: level } })}
+                  options={[
+                    { value: 'easy', label: 'Easy' },
+                    { value: 'medium', label: 'Medium' },
+                    { value: 'hard', label: 'Hard' },
+                  ]}
+                />
+              </Row>
+            ))}
+          </section>
+
+          <section className="card">
+            <h2>All games</h2>
+            <Row title="Rounds per session" hint="How many rounds before the big celebration.">
               <Segmented<number>
                 value={settings.rounds}
                 onChange={(rounds) => update({ rounds })}
                 options={[1, 2, 3, 5, 8].map((n) => ({ value: n, label: String(n) }))}
               />
             </Row>
-            <Row title="Touch target size" hint="How close the finger must get to a dot. Larger is more forgiving.">
+            <Row title="Touch target size" hint="How forgiving touches are: dots, bubbles, shadows and tracing paths. Larger is easier.">
               <Segmented<Tolerance>
                 value={settings.tolerance}
                 onChange={(tolerance) => update({ tolerance })}
@@ -113,7 +120,7 @@ export function Settings() {
                 ]}
               />
             </Row>
-            <Row title="Show guide" hint="Faint outline of the picture and dashes showing the way.">
+            <Row title="Show guide" hint="Faint outlines and arrows showing the way in Connect the Dots and Trace.">
               <Toggle label="Show guide" value={settings.guide} onChange={(guide) => update({ guide })} />
             </Row>
           </section>

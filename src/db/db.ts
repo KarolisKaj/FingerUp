@@ -5,7 +5,10 @@ export type Tolerance = 'large' | 'normal' | 'small'
 
 /** Per-child settings the therapist tunes; every game reads what applies to it. */
 export interface ChildSettings {
+  /** Fallback level for games without their own entry in `levels`. */
   difficulty: Difficulty
+  /** Per-game level, keyed by game id. */
+  levels: Partial<Record<string, Difficulty>>
   rounds: number
   tolerance: Tolerance
   guide: boolean
@@ -16,6 +19,7 @@ export interface ChildSettings {
 
 export const defaultSettings: ChildSettings = {
   difficulty: 'easy',
+  levels: {},
   rounds: 3,
   tolerance: 'large',
   guide: true,
@@ -67,6 +71,10 @@ export async function requestPersistentStorage() {
 
 export function childSettings(child: Child | undefined): ChildSettings {
   return { ...defaultSettings, ...child?.settings }
+}
+
+export function levelFor(settings: ChildSettings, gameId: string): Difficulty {
+  return settings.levels[gameId] ?? settings.difficulty
 }
 
 export async function deleteChild(childId: number) {
