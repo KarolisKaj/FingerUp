@@ -1,6 +1,34 @@
+import { shuffle } from '../../art/art'
 import type { MascotPose } from '../../components/Mascot'
+import type { Difficulty } from '../../db/db'
 import type { GameInfo } from '../types'
-import { MoveRound, planMoves, type MoveRoundResult } from './Move'
+import { MoveRound, type MoveRoundResult } from './Move'
+
+const POOLS: Record<Difficulty, MascotPose[]> = {
+  easy: ['clap', 'armsUp', 'wave', 'stomp'],
+  medium: ['clap', 'armsUp', 'wave', 'stomp', 'jump', 'spin', 'wiggle'],
+  hard: ['clap', 'armsUp', 'stomp', 'jump', 'spin', 'wiggle'],
+}
+
+/** Each round is one movement, or two in a row on hard ("clap, then jump"). */
+function planMoves(level: Difficulty, rounds: number): MascotPose[][] {
+  const out: MascotPose[][] = []
+  let bag: MascotPose[] = []
+  const next = () => {
+    if (bag.length === 0) bag = shuffle(POOLS[level])
+    return bag.pop()!
+  }
+  for (let i = 0; i < rounds; i++) {
+    const first = next()
+    if (level !== 'hard') out.push([first])
+    else {
+      let second = next()
+      if (second === first) second = next()
+      out.push([first, second])
+    }
+  }
+  return out
+}
 
 export const move: GameInfo<MoveRoundResult, MascotPose[][]> = {
   id: 'move',

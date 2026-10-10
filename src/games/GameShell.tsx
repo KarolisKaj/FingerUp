@@ -14,7 +14,7 @@ import './GameShell.css'
 
 type Phase = 'intro' | 'playing' | 'roundDone' | 'finished'
 
-const CHEERS = ['Great job!', 'Yay!', 'Well done!', 'Wonderful!', 'Hooray!', 'You did it!']
+const CHEERS = ['Great job!', 'Yay!', 'Well done!', 'Wonderful!', 'Hooray!', 'Super!']
 
 /**
  * Everything around a game: intro, star jar, round rewards, final celebration, saving results

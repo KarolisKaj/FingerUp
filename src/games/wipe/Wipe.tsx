@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { ANIMALS, artImage, pick } from '../../art/art'
+import { ANIMALS, artImage } from '../../art/art'
 import { sound } from '../../audio/sound'
 import { speech } from '../../audio/speech'
 import type { Difficulty, Tolerance } from '../../db/db'
@@ -19,7 +19,7 @@ interface LevelConfig {
   reveal: number
 }
 
-export const wipeLevels: Record<Difficulty, LevelConfig> = {
+const wipeLevels: Record<Difficulty, LevelConfig> = {
   easy: { brush: 0.2, reveal: 0.45 },
   medium: { brush: 0.14, reveal: 0.6 },
   hard: { brush: 0.09, reveal: 0.75 },
@@ -283,5 +283,3 @@ export function WipeRound({ round, level, settings, plan, active, complete }: Ro
 
   return <canvas ref={canvasRef} className="board-canvas" />
 }
-
-export const planWipe = (rounds: number) => pick(ANIMALS, rounds)

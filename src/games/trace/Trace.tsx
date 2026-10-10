@@ -314,7 +314,7 @@ export function TraceRound({ round, level, settings, plan, active, complete }: R
   // Say what to draw once the round is live.
   useEffect(() => {
     if (gameRef.current) gameRef.current.active = active
-    if (active) speech.say(shape.say)
+    if (active) speech.say(shape.say, { queue: true })
   }, [active, shape])
 
   return <canvas ref={canvasRef} className="board-canvas" />

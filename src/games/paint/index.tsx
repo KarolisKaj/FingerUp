@@ -1,6 +1,6 @@
-import type { ArtId } from '../../art/art'
+import { ANIMALS, pick, type ArtId } from '../../art/art'
 import { mean, sum, type GameInfo } from '../types'
-import { PaintRound, planPaint, type PaintRoundResult } from './Paint'
+import { PaintRound, type PaintRoundResult } from './Paint'
 
 export const paint: GameInfo<PaintRoundResult, ArtId[]> = {
   id: 'paint',
@@ -22,7 +22,7 @@ export const paint: GameInfo<PaintRoundResult, ArtId[]> = {
     hard: 'Faint animal to colour in, thin brush',
   },
   Round: PaintRound,
-  plan: (_, rounds) => planPaint(rounds),
+  plan: (_, rounds) => pick(ANIMALS, rounds).map((a) => a.id),
   // One painting is a full activity; more rounds come from "Again!".
   rounds: () => 1,
   metrics: [

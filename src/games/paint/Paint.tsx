@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ANIMALS, artImage, pick, type ArtId } from '../../art/art'
+import { artImage, type ArtId } from '../../art/art'
 import { sound } from '../../audio/sound'
 import { speech } from '../../audio/speech'
 import type { Difficulty } from '../../db/db'
@@ -23,7 +23,7 @@ interface LevelConfig {
   picture: boolean
 }
 
-export const paintLevels: Record<Difficulty, LevelConfig> = {
+const paintLevels: Record<Difficulty, LevelConfig> = {
   easy: { brush: 0.07, picture: false },
   medium: { brush: 0.05, picture: true },
   hard: { brush: 0.03, picture: true },
@@ -311,5 +311,3 @@ export function PaintRound({ round, level, settings, plan, active, complete }: R
     </>
   )
 }
-
-export const planPaint = (rounds: number) => pick(ANIMALS, rounds).map((a) => a.id)

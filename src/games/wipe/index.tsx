@@ -1,6 +1,6 @@
-import type { ANIMALS } from '../../art/art'
+import { ANIMALS, pick } from '../../art/art'
 import { mean, sum, type GameInfo } from '../types'
-import { WipeRound, planWipe, type WipeRoundResult } from './Wipe'
+import { WipeRound, type WipeRoundResult } from './Wipe'
 
 export const wipe: GameInfo<WipeRoundResult, (typeof ANIMALS)[number][]> = {
   id: 'wipe',
@@ -21,7 +21,7 @@ export const wipe: GameInfo<WipeRoundResult, (typeof ANIMALS)[number][]> = {
     hard: 'Narrow brush, clear most of the window',
   },
   Round: WipeRound,
-  plan: (_, rounds) => planWipe(rounds),
+  plan: (_, rounds) => pick(ANIMALS, rounds),
   metrics: [
     { label: 'Found', value: (r) => r.length, format: String },
     { label: 'Sec / animal', value: (r) => mean(r.map((x) => x.durationMs / 1000)), format: (n) => n.toFixed(1) },

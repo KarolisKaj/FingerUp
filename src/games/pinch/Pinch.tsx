@@ -29,7 +29,7 @@ interface LevelConfig {
   onTarget: boolean
 }
 
-export const pinchLevels: Record<Difficulty, LevelConfig> = {
+const pinchLevels: Record<Difficulty, LevelConfig> = {
   easy: { items: 3, pinchTo: 0.7, spreadTo: 1.35, onTarget: false },
   medium: { items: 4, pinchTo: 0.55, spreadTo: 1.6, onTarget: false },
   hard: { items: 5, pinchTo: 0.4, spreadTo: 1.9, onTarget: true },
@@ -55,7 +55,7 @@ export function PinchRound({ round, level, settings, plan, active, complete }: R
 
   const pointers = useRef(new Map<number, Pt>())
   const gesture = useRef<{ startDist: number; ticks: number } | null>(null)
-  const stats = useRef({ startedAt: Date.now(), retries: 0 })
+  const stats = useRef({ startedAt: 0, retries: 0 })
   const lastHintSpeech = useRef(0)
   const oneFingerTimer = useRef<number | undefined>(undefined)
 
@@ -73,7 +73,10 @@ export function PinchRound({ round, level, settings, plan, active, complete }: R
     return () => clearTimeout(t)
   }, [showHint, item])
 
-  useEffect(() => () => clearTimeout(oneFingerTimer.current), [])
+  useEffect(() => {
+    stats.current.startedAt = Date.now()
+    return () => clearTimeout(oneFingerTimer.current)
+  }, [])
 
   const objectSize = Math.min(size.w, size.h) * 0.42
   const center = { x: size.w / 2, y: size.h / 2 }

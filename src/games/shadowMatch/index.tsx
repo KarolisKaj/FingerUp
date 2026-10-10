@@ -1,7 +1,22 @@
+import { ANIMALS, pick, shuffle } from '../../art/art'
+import type { Difficulty } from '../../db/db'
 import { mean, sum, type GameInfo } from '../types'
-import { ShadowMatchRound, planShadows, type ShadowRoundResult } from './ShadowMatch'
+import { ShadowMatchRound, type RoundPlan, type ShadowRoundResult } from './ShadowMatch'
 
-export const shadowMatch: GameInfo<ShadowRoundResult, ReturnType<typeof planShadows>> = {
+const shadowCounts: Record<Difficulty, number> = { easy: 2, medium: 3, hard: 4 }
+
+function planShadows(level: Difficulty, rounds: number): RoundPlan[] {
+  const n = shadowCounts[level]
+  return Array.from({ length: rounds }, () => {
+    const order = [...Array(n).keys()]
+    let trayOrder = shuffle(order)
+    // Never line animals up directly under their own shadow: that would make it trivial.
+    for (let i = 0; i < 10 && n > 1 && trayOrder.some((v, k) => v === k); i++) trayOrder = shuffle(order)
+    return { animals: pick(ANIMALS, n), shadowOrder: order, trayOrder }
+  })
+}
+
+export const shadowMatch: GameInfo<ShadowRoundResult, RoundPlan[]> = {
   id: 'shadow-match',
   title: 'Shadow Match',
   skill: 'Drag and drop, shape and visual matching',

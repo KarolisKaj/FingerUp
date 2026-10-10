@@ -1,7 +1,18 @@
+import { ANIMALS, pick, shuffle } from '../../art/art'
+import type { Difficulty } from '../../db/db'
 import { mean, sum, type GameInfo } from '../types'
-import { PairsRound, planPairs, type PairsRoundResult } from './Pairs'
+import { PairsRound, type Card, type PairsRoundResult } from './Pairs'
 
-export const pairs: GameInfo<PairsRoundResult, ReturnType<typeof planPairs>> = {
+const pairCounts: Record<Difficulty, number> = { easy: 2, medium: 3, hard: 4 }
+
+function planPairs(level: Difficulty, rounds: number): Card[][] {
+  return Array.from({ length: rounds }, () => {
+    const animals = pick(ANIMALS, pairCounts[level])
+    return shuffle([...animals, ...animals]).map((animal, id) => ({ id, animal }))
+  })
+}
+
+export const pairs: GameInfo<PairsRoundResult, Card[][]> = {
   id: 'pairs',
   title: 'Peekaboo Pairs',
   skill: 'Visual memory, matching, taking turns with tapping',

@@ -5,7 +5,10 @@ export type Tolerance = 'large' | 'normal' | 'small'
 
 /** Per-child settings the therapist tunes; every game reads what applies to it. */
 export interface ChildSettings {
-  /** Fallback level for games without their own entry in `levels`. */
+  /**
+   * Level chosen before per-game levels existed, when Connect the Dots was the only game.
+   * Still honoured for Connect the Dots; every other game starts on easy.
+   */
   difficulty: Difficulty
   /** Per-game level, keyed by game id. */
   levels: Partial<Record<string, Difficulty>>
@@ -74,7 +77,7 @@ export function childSettings(child: Child | undefined): ChildSettings {
 }
 
 export function levelFor(settings: ChildSettings, gameId: string): Difficulty {
-  return settings.levels[gameId] ?? settings.difficulty
+  return settings.levels[gameId] ?? (gameId === 'connect-dots' ? settings.difficulty : 'easy')
 }
 
 export async function deleteChild(childId: number) {

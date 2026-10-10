@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import { Art } from '../../art/Art'
-import { ANIMALS, pick, shuffle, type ArtId } from '../../art/art'
+import type { ArtId } from '../../art/art'
 import { sound } from '../../audio/sound'
 import { speech } from '../../audio/speech'
 import { Burst } from '../../components/Burst'
-import type { Difficulty, Tolerance } from '../../db/db'
+import type { Tolerance } from '../../db/db'
 import type { RoundProps } from '../types'
 import './ShadowMatch.css'
 
@@ -14,25 +14,13 @@ export interface ShadowRoundResult {
   durationMs: number
 }
 
-export const shadowCounts: Record<Difficulty, number> = { easy: 2, medium: 3, hard: 4 }
 const snapScale: Record<Tolerance, number> = { large: 0.8, normal: 0.6, small: 0.45 }
 
-interface RoundPlan {
+export interface RoundPlan {
   animals: { id: ArtId; name: string }[]
   /** Order of the shadows (top) and of the animals in the tray (bottom). */
   shadowOrder: number[]
   trayOrder: number[]
-}
-
-export function planShadows(level: Difficulty, rounds: number): RoundPlan[] {
-  const n = shadowCounts[level]
-  return Array.from({ length: rounds }, () => {
-    const order = [...Array(n).keys()]
-    let trayOrder = shuffle(order)
-    // Never line animals up directly under their own shadow: that would make it trivial.
-    for (let i = 0; i < 10 && n > 1 && trayOrder.some((v, k) => v === k); i++) trayOrder = shuffle(order)
-    return { animals: pick(ANIMALS, n), shadowOrder: order, trayOrder }
-  })
 }
 
 type Pt = { x: number; y: number }
@@ -45,9 +33,10 @@ export function ShadowMatchRound({ round, level, settings, plan, active, complet
   const [placed, setPlaced] = useState<boolean[]>(() => animals.map(() => false))
   const [drag, setDrag] = useState<{ index: number; pointer: number; at: Pt; offset: Pt } | null>(null)
   const [justPlaced, setJustPlaced] = useState<number | null>(null)
-  const stats = useRef({ startedAt: Date.now(), wrongDrops: 0 })
+  const stats = useRef({ startedAt: 0, wrongDrops: 0 })
 
   useEffect(() => {
+    stats.current.startedAt = Date.now()
     const el = boardRef.current!
     const ro = new ResizeObserver(() => setSize({ w: el.clientWidth, h: el.clientHeight }))
     ro.observe(el)

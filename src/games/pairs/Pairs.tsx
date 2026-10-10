@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Art } from '../../art/Art'
-import { ANIMALS, pick, shuffle, type ArtId } from '../../art/art'
+import type { ArtId } from '../../art/art'
 import { sound } from '../../audio/sound'
 import { speech } from '../../audio/speech'
 import type { Difficulty } from '../../db/db'
@@ -14,20 +14,12 @@ export interface PairsRoundResult {
   durationMs: number
 }
 
-export const pairCounts: Record<Difficulty, number> = { easy: 2, medium: 3, hard: 4 }
 /** How long all cards are shown face up at the start of a round. */
 const PEEK_MS: Record<Difficulty, number> = { easy: 2500, medium: 2200, hard: 1800 }
 
-interface Card {
+export interface Card {
   id: number
   animal: { id: ArtId; name: string }
-}
-
-export function planPairs(level: Difficulty, rounds: number): Card[][] {
-  return Array.from({ length: rounds }, () => {
-    const animals = pick(ANIMALS, pairCounts[level])
-    return shuffle([...animals, ...animals]).map((animal, id) => ({ id, animal }))
-  })
 }
 
 export function PairsRound({ round, level, plan, active, complete }: RoundProps<PairsRoundResult, Card[][]>) {
@@ -36,7 +28,7 @@ export function PairsRound({ round, level, plan, active, complete }: RoundProps<
   const [up, setUp] = useState<number[]>([])
   const [matched, setMatched] = useState<Set<number>>(new Set())
   const [wiggle, setWiggle] = useState<number[]>([])
-  const stats = useRef({ startedAt: Date.now(), flips: 0, mismatches: 0 })
+  const stats = useRef({ startedAt: 0, flips: 0, mismatches: 0 })
   const busy = useRef(false)
   const boardRef = useRef<HTMLDivElement>(null)
   const [board, setBoard] = useState({ w: 0, h: 0 })

@@ -18,9 +18,10 @@ export const speech = {
     if (!value) this.stop()
   },
 
-  say(text: string) {
+  /** Speaks `text`. By default it interrupts; with `queue` it waits for whatever is being said. */
+  say(text: string, { queue = false } = {}) {
     if (!enabled || !('speechSynthesis' in window)) return
-    window.speechSynthesis.cancel()
+    if (!queue) window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(text)
     const voice = pickVoice()
     if (voice) utterance.voice = voice

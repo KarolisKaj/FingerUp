@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { shuffle } from '../../art/art'
 import { sound } from '../../audio/sound'
 import { speech } from '../../audio/speech'
 import { Mascot, type MascotPose } from '../../components/Mascot'
-import type { Difficulty } from '../../db/db'
 import type { RoundProps } from '../types'
 import './Move.css'
 
@@ -27,32 +25,6 @@ const ACTIONS: Record<MascotPose, Action> = {
   jump: { id: 'jump', label: 'Jump', say: 'Jump, jump, jump!', beat: 'drum' },
   spin: { id: 'spin', label: 'Turn around', say: 'Turn all the way around!', beat: 'none' },
   wiggle: { id: 'wiggle', label: 'Wiggle', say: 'Wiggle, wiggle, wiggle!', beat: 'clap' },
-}
-
-const POOLS: Record<Difficulty, MascotPose[]> = {
-  easy: ['clap', 'armsUp', 'wave', 'stomp'],
-  medium: ['clap', 'armsUp', 'wave', 'stomp', 'jump', 'spin', 'wiggle'],
-  hard: ['clap', 'armsUp', 'stomp', 'jump', 'spin', 'wiggle'],
-}
-
-/** Each round is one movement, or two in a row on hard ("clap, then jump"). */
-export function planMoves(level: Difficulty, rounds: number): MascotPose[][] {
-  const out: MascotPose[][] = []
-  let bag: MascotPose[] = []
-  const next = () => {
-    if (bag.length === 0) bag = shuffle(POOLS[level])
-    return bag.pop()!
-  }
-  for (let i = 0; i < rounds; i++) {
-    const first = next()
-    if (level !== 'hard') out.push([first])
-    else {
-      let second = next()
-      if (second === first) second = next()
-      out.push([first, second])
-    }
-  }
-  return out
 }
 
 const BEAT_MS = 600
@@ -82,7 +54,7 @@ export function MoveRound({ round, settings, plan, active, complete }: RoundProp
     if (!active) return
     const action = moves[step]
     if (!roundStart.current) roundStart.current = Date.now()
-    speech.say(moves.length > 1 && step === 0 ? `${action.say} Then, ${moves[1].say.toLowerCase()}` : action.say)
+    speech.say(moves.length > 1 && step === 0 ? `${action.say} Then, ${moves[1].say.toLowerCase()}` : action.say, { queue: true })
     let count = 0
     const timer = setInterval(() => {
       count++

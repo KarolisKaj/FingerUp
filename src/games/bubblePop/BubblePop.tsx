@@ -20,7 +20,7 @@ interface LevelConfig {
   sway: number
 }
 
-export const bubbleLevels: Record<Difficulty, LevelConfig> = {
+const bubbleLevels: Record<Difficulty, LevelConfig> = {
   easy: { size: 0.15, speed: 45, maxBubbles: 3, pops: 6, sway: 14 },
   medium: { size: 0.11, speed: 65, maxBubbles: 5, pops: 10, sway: 22 },
   hard: { size: 0.075, speed: 90, maxBubbles: 7, pops: 14, sway: 34 },
