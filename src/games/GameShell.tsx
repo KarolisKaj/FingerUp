@@ -49,9 +49,11 @@ export function GameShell<R, P>({
     setPhaseState(next)
   }
   const [round, setRound] = useState(0)
+  // Stars only for rounds the child actually earned.
   const [earned, setEarned] = useState(0)
   const [praise, setPraise] = useState<Praise>({})
-  const session = useRef({ startedAt: 0, results: [] as R[], saved: false })
+  const [celebrate, setCelebrate] = useState(true)
+  const session = useRef({ startedAt: 0, results: [] as R[], rewarded: 0, saved: false })
 
   const save = (completed: boolean) => {
     const s = session.current
@@ -98,33 +100,47 @@ export function GameShell<R, P>({
   const complete = (result: R, p: Praise = {}) => {
     if (phaseRef.current !== 'playing') return
     const s = session.current
+    const reward = p.reward !== false
     s.results.push(result)
-    setEarned(s.results.length)
+    if (reward) s.rewarded++
+    setEarned(s.rewarded)
     if (s.results.length < total) {
-      const title = p.title ?? CHEERS[Math.floor(Math.random() * CHEERS.length)]
-      setPraise({ ...p, title })
+      const title = p.title ?? (reward ? CHEERS[Math.floor(Math.random() * CHEERS.length)] : 'Next one!')
+      setPraise({ ...p, reward, title })
       setPhase('roundDone')
-      sound.roundComplete()
+      if (reward) sound.roundComplete()
+      else sound.tap()
       speech.say(p.speech ?? title)
     } else {
+      // Only celebrate a session in which something was earned.
+      const party = s.rewarded > 0
       setPraise(p)
+      setCelebrate(party)
       setPhase('finished')
-      sound.celebrate()
-      speech.say('Amazing! You did it!')
+      if (party) {
+        sound.celebrate()
+        speech.say('Amazing! You did it!')
+      } else {
+        sound.start()
+        speech.say('All done!')
+      }
       save(true)
     }
   }
 
-  // Short pause on the round reward, then the next round.
+  // Short pause on the round reward (shorter when there was nothing to celebrate), then the next round.
   useEffect(() => {
     if (phase !== 'roundDone') return
-    const timer = setTimeout(() => {
-      setRound((r) => r + 1)
-      phaseRef.current = 'playing'
-      setPhaseState('playing')
-    }, 2600)
+    const timer = setTimeout(
+      () => {
+        setRound((r) => r + 1)
+        phaseRef.current = 'playing'
+        setPhaseState('playing')
+      },
+      praise.reward === false ? 1400 : 2600,
+    )
     return () => clearTimeout(timer)
-  }, [phase])
+  }, [phase, praise.reward])
 
   const exit = () => {
     save(false)
@@ -176,7 +192,7 @@ export function GameShell<R, P>({
                 <Art id={praise.art} size={150} />
               </div>
             ) : (
-              <Mascot mood="happy" size={150} />
+              <Mascot mood={praise.reward === false ? 'idle' : 'happy'} size={150} />
             )}
             <h2>{praise.title}</h2>
             {praise.subtitle && <p className="overlay-text">{praise.subtitle}</p>}
@@ -186,10 +202,10 @@ export function GameShell<R, P>({
 
       {phase === 'finished' && (
         <div className="overlay">
-          <Confetti calm={settings.calm} />
+          {celebrate && <Confetti calm={settings.calm} />}
           <div className="overlay-card pop-in">
-            <Mascot mood="cheer" size={180} />
-            <h2>You did it!</h2>
+            <Mascot mood={celebrate ? 'cheer' : 'idle'} size={180} />
+            <h2>{celebrate ? 'You did it!' : 'All done!'}</h2>
             <StarJar earned={earned} total={total} />
             <div className="overlay-actions">
               <button type="button" className="btn btn-big" onClick={() => navigate(`/child/${child.id}`)}>

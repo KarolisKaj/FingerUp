@@ -43,7 +43,10 @@ export const move: GameInfo<MoveRoundResult, MascotPose[][]> = {
       <ellipse cx="60" cy="82" rx="8" ry="5" fill="#fff" />
     </svg>
   ),
-  intro: { text: 'Copy Pip! Stand up and move along.', speech: 'Stand up, and copy me!' },
+  intro: {
+    text: 'Copy Pip! Grown-ups: tap “Did it” when the child copies the movement, or “Next” to move on.',
+    speech: 'Stand up, and copy me!',
+  },
   levels: {
     easy: 'Clap, reach up, wave, stomp',
     medium: 'Adds jump, turn around and wiggle',
@@ -51,5 +54,21 @@ export const move: GameInfo<MoveRoundResult, MascotPose[][]> = {
   },
   Round: MoveRound,
   plan: planMoves,
-  metrics: [{ label: 'Movements', value: (r) => r.reduce((n, x) => n + x.actions.length, 0), format: String }],
+  metrics: [
+    { label: 'Shown', value: (r) => r.length, format: String },
+    {
+      label: 'Copied',
+      hint: 'Movements the adult confirmed the child copied',
+      value: (r) => (r.some((x) => x.done !== undefined) ? r.filter((x) => x.done).length : null),
+      format: String,
+    },
+    {
+      label: 'Copy rate',
+      value: (r) => {
+        const known = r.filter((x) => x.done !== undefined)
+        return known.length ? (100 * known.filter((x) => x.done).length) / known.length : null
+      },
+      format: (n) => `${Math.round(n)}%`,
+    },
+  ],
 }

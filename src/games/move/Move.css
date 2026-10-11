@@ -47,10 +47,6 @@
   transform: scale(1.05);
 }
 
-.move-label span.done {
-  color: var(--mint);
-}
-
 .move-label span + span::before {
   content: '→ ';
   color: var(--line);
@@ -76,11 +72,16 @@
   transform: scale(1.25);
 }
 
-.move-next {
+.move-adult {
   position: absolute;
   right: 12px;
   bottom: 12px;
   z-index: 2;
-  width: 64px;
-  padding: 0;
+  display: flex;
+  gap: 12px;
+}
+
+.move-adult .btn {
+  min-height: 64px;
+  font-size: 22px;
 }

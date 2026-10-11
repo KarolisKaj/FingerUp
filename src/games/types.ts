@@ -4,6 +4,11 @@ import type { ChildSettings, Difficulty } from '../db/db'
 
 /** What the round reward overlay says. All optional: the shell has friendly defaults. */
 export interface Praise {
+  /**
+   * False when the round ended without the child earning anything (e.g. the adult skipped it):
+   * no star, no celebration, just a neutral "Next one!".
+   */
+  reward?: boolean
   title?: string
   subtitle?: string
   speech?: string
